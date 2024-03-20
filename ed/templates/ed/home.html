@@ -1,0 +1,74 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="{% static 'ed/styles.css' %}">
+</head>
+<body>
+
+<h1>Email efficiency calculator</h1>
+
+<div class="container">
+    
+    <div class="left">
+    <form method="post">
+        {% csrf_token %}
+        Size of team (N): 
+        <br>
+        <input type="number" name="N" value="{{ N }}">
+        <br>
+        Time period (days):
+        <br>
+        <input type="number" name="PeriodSize_days" value="{{ PeriodSize_days }}">
+        <br>
+        Average time to read an email (seconds):
+        <br> 
+        <input type="number" name="Tr" value="{{ Tr }}">
+        <br><br><br><br><br>
+        Number of emails sent per person per period: 
+        <br>
+        <input type="number" name="Ep" value="{{ Ep }}"> 
+        <br>
+	    Average number of recipients for each email: 
+        <br>
+        <input type="number" name="Ra" value="{{ Ra }}">
+        <br>
+        Proportion of recipients who need each email: 
+        <br>
+        <input type="number" name="Pr" value="{{ Pr }}" step="0.01">
+        <br><br>
+        <button type="submit" class="submit-button">Submit</button>
+        <br><br><br><br>
+        <h3>Average number of emails received per person</h3>
+        Period: {{ emails_received }}
+        <br>
+        Year: {{ emails_received_year }}
+    </form>
+    </div>
+    
+    <div class="right" style="font-size: 26px;">
+
+        <h3>Total time reading emails per person</h3>
+        Period (mins)
+        <div class="jindent">Total: {{ time_per_person }}</div>
+        <div class="jindent">Wasted: {{ time_per_person_notrelevant }}</div>
+        <div>Year (hours)</div>
+        <div class="jindent">Total: {{ time_per_year }}</div>
+        <div class="jindent">Wasted: {{ time_per_year_notrelevant }}</div>
+        <br>
+        <h3>Staff time reading emails</h3>
+        Period (hours)
+        <div class="jindent">Total: {{ time_staff }}</div>
+        <div class="jindent">Wasted: {{ time_staff_notrelevant }}</div>
+        <br><br> 
+
+    </div>
+
+</div>
+
+</body>
+</html>
