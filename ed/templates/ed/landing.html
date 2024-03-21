@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Landing Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container text-center mt-5">
+        <h1>Email Efficiency Calculator for Good Directions</h1>
+        Select the version of the calculator!
+        <div class="mt-4">
+            <a href="{% url 'basic' %}" class="btn btn-primary">Basic</a>
+            <a href="{% url 'teams' %}" class="btn btn-success">Teams</a>
+            <a href="{% url 'teams_stochastic' %}" class="btn btn-info">Teams Stochastic</a>
+        </div>
+    </div>
+</body>
+</html>

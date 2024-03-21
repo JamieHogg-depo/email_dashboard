@@ -35,7 +35,10 @@ class EmailProductivityCalculator:
             'notrelevant': np.round( ((260/self.PeriodSize_days) * self.period['notrelevant']) / 60, 2) 
         }
 
-def home(request):
+def landing(request):
+    return render(request, 'ed/landing.html')
+
+def basic(request):
 
     context = { # this is a dictionary with default value 
         'N': 1,  
@@ -71,7 +74,7 @@ def home(request):
         context['time_staff_notrelevant'] = np.round( (calculator.period['notrelevant']*calculator.N)/60 , 2)
 
     # Pass the context dict to be rendered in the html file
-    return render(request, 'ed/home.html', context) # pass dictionary
+    return render(request, 'ed/basic.html', context) # pass dictionary
 
 def teams(request):
 

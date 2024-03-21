@@ -1,0 +1,27 @@
+---
+title: "Email Efficiency Report Title"
+author: "James Hogg and Kerrie Mengersen"
+#date: "The Date"
+format:
+  pdf:
+    documentclass: scrartcl
+    papersize: report
+editor: visual
+---
+
+# Introduction
+
+Introduce the purpose of your report here.
+
+# Methodology
+
+Describe the methodology of your research or analysis.
+
+```{python}
+# Python code chunk for data analysis or other calculations
+import numpy as np
+data = np.random.rand(100)
+print(data)
+```
+
+This

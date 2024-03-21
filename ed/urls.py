@@ -2,7 +2,9 @@ from django.urls import path
 from ed import views
 
 urlpatterns = [
-    path("", views.home, name="home"),
+    path("", views.landing, name="landing"),
+    path("basic/", views.basic, name = "basic"),
     path("teams/", views.teams, name = "teams"),
-    path("teams_stochastic/", views.teams_stochastic, name = "ts")
+    path("teams_stochastic/", views.teams_stochastic, name = "teams_stochastic")
+    
 ]
