@@ -12,43 +12,58 @@
 
 <h1>Email efficiency calculator</h1>
 
+<!-- ---------------------------------------------------------------------- -->
+<form method="post"> <!-- FORM -->
+{% csrf_token %}
+
+Time period (days):
+<br>
+<input type="number" name="PeriodSize_days" value="{{ PeriodSize_days }}">
+<br>
+Average time to read an email (seconds):
+<br> 
+<input type="number" name="Tr" value="{{ Tr }}">
+
 <div class="container">
     
     <div class="left">
-    <form method="post">
-        {% csrf_token %}
-        Size of team (N): 
+    <h2>Team 1</h2>
+
+        Size of team: 
         <br>
-        <input type="number" name="N" value="{{ N }}">
+        <input type="number" name="N_1" value="{{ N_1 }}">
         <br>
-        Time period (days):
-        <br>
-        <input type="number" name="PeriodSize_days" value="{{ PeriodSize_days }}">
-        <br>
-        Average time to read an email (seconds):
-        <br> 
-        <input type="number" name="Tr" value="{{ Tr }}">
-        <br><br><br><br><br>
         Number of emails sent per person per period: 
         <br>
-        <input type="number" name="Ep" value="{{ Ep }}"> 
+        <input type="number" name="Ep_1" value="{{ Ep_1 }}"> 
         <br>
 	    Average number of recipients for each email: 
         <br>
-        <input type="number" name="Ra" value="{{ Ra }}">
+        <input type="number" name="Ra_1" value="{{ Ra_1 }}">
         <br>
         Proportion of recipients who need each email: 
         <br>
-        <input type="number" name="Pr" value="{{ Pr }}" step="0.01">
-        <br><br>
-        <button type="submit" class="submit-button">Submit</button>
-        <br><br><br><br>
-        <h3>Average number of emails received per person</h3>
-        Period: {{ emails_received }}
-        <br>
-        Year: {{ emails_received_year }}
-    </form>
+        <input type="number" name="Pr_1" value="{{ Pr_1 }}" step="0.01">
     </div>
+
+    <div class="right">
+        <h2>Team 2</h2>
+            Size of team: 
+            <br>
+            <input type="number" name="N_2" value="{{ N_2 }}">
+            <br>
+            Number of emails sent per person per period: 
+            <br>
+            <input type="number" name="Ep_2" value="{{ Ep_2 }}"> 
+            <br>
+            Average number of recipients for each email: 
+            <br>
+            <input type="number" name="Ra_2" value="{{ Ra_2 }}">
+            <br>
+            Proportion of recipients who need each email: 
+            <br>
+            <input type="number" name="Pr_2" value="{{ Pr_2 }}" step="0.01">
+        </div>
     
     <div class="right" style="font-size: 26px;">
 
@@ -69,6 +84,10 @@
     </div>
 
 </div>
+
+<button type="submit" class="submit-button">Submit</button>
+
+</form> <!-- END FORM -->
 
 </body>
 </html>

@@ -57,3 +57,14 @@ input[type="number"] {
 .submit-button:hover {
     background-color: #45a049; /* Darker shade of green on hover */
 }
+
+/* Customise the result square */
+.result-square {
+    background-color: #3553ff; /* Green background */
+    color: white; /* White text */
+    padding: 12px 24px; /* Top and bottom padding, left and right padding */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
