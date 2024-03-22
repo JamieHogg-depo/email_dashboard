@@ -3,6 +3,9 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.offline
 
 ## ----------------------------------------------------------------------------
 ## FUNCTIONS ## -------------------------------------------------------------------
@@ -78,6 +81,19 @@ def basic(request):
         # staff hours
         context['time_staff'] = np.round( (calculator.period['total']*calculator.N)/60 , 2)
         context['time_staff_notrelevant'] = np.round( (calculator.period['notrelevant']*calculator.N)/60 , 2)
+
+        # Create pie chart
+        fig = px.pie(values=[calculator.period['total'] - calculator.period['notrelevant'], 
+                             calculator.period['notrelevant']], 
+                             names=['Essential', 'Non-Essential'],
+                             color_discrete_sequence=['#ff9999', '#99ff99'])
+        fig.update_layout(
+            title="Total time reading emails",
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            showlegend=False
+        )
+        context['graph'] = plotly.offline.plot(fig, output_type='div')
 
     # Pass the context dict to be rendered in the html file
     return render(request, 'ed/basic.html', context) # pass dictionary

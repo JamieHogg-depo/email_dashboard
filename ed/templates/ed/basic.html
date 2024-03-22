@@ -14,7 +14,7 @@
 
 <div class="container">
     
-    <div class="left">
+    <div class="column form">
     <form method="post">
         {% csrf_token %}
         Size of team (N): 
@@ -44,13 +44,21 @@
         <button type="submit" class="submit-button">Submit</button>
         <br><br><br><br>
         <h3>Average number of emails received per person</h3>
-        Period: <button type="submit" class="result-square">{{ emails_received }}</button>
+        Period: {{ emails_received }}
         <br>
-        Year: <button type="submit" class="result-square">{{ emails_received_year }}</button>
+        Year: {{ emails_received_year }}
     </form>
     </div>
+
+    <div class="column plots">
+        {% if graph %}
+        {{ graph|safe }}
+        {% else %}
+        <p>No graph was provided.</p>
+        {% endif %}
+    </div>
     
-    <div class="right" style="font-size: 26px;">
+    <div class="column results" style="font-size: 26px;">
 
         <h3>Total time reading emails per person</h3>
         Period (mins)
@@ -64,8 +72,6 @@
         Period (hours)
         <div class="jindent">Total: {{ time_staff }}</div>
         <div class="jindent">Non Essential: {{ time_staff_notrelevant }}</div>
-        <br><br> 
-
     </div>
 
 </div>

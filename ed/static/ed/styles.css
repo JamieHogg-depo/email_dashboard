@@ -6,14 +6,21 @@ body {
     font-size: 18px; /* Larger font size */
 }
 
+/* Customize the containers */
 .container {
     display: flex;
     justify-content: space-between; /* This spaces out the .left and .right elements */
+    margin: 10px 10px;
+    max-width: 1200px;
+    gap: 50px;
 }
 
-.left, .right {
-    flex: 1; /* This allows both .left and .right to grow and take up equal space */
-    padding: 20px; /* Adds some padding around the content for better spacing */
+.column {
+    flex: 1;
+    flex-basis: calc(33.333% - 20px);
+    padding: 50px; /* Spacing inside columns */
+    margin: 10px 10px; /* Spacing between columns */
+    min-width: 300px;
 }
 
 .center {
