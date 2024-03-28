@@ -6,69 +6,193 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator</title>
-    <link rel="stylesheet" href="{% static 'ed/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'ed/styles_stochastic.css' %}">
 </head>
 <body>
 
 <h1>Email efficiency calculator</h1>
 
-<div class="container">
-    
-    <div class="left">
-    <form method="post">
-        {% csrf_token %}
-        Size of team (N): 
-        <br>
-        <input type="number" name="N" value="{{ N }}">
-        <br>
-        Time period (days):
-        <br>
-        <input type="number" name="PeriodSize_days" value="{{ PeriodSize_days }}">
-        <br>
-        Average time to read an email (seconds):
-        <br> 
-        <input type="number" name="Tr" value="{{ Tr }}">
-        <br><br><br><br><br>
-        Number of emails sent per person per period: 
-        <br>
-        <input type="number" name="Ep" value="{{ Ep }}"> 
-        <br>
-	    Average number of recipients for each email: 
-        <br>
-        <input type="number" name="Ra" value="{{ Ra }}">
-        <br>
-        Proportion of recipients who need each email: 
-        <br>
-        <input type="number" name="Pr" value="{{ Pr }}" step="0.01">
-        <br><br>
-        <button type="submit" class="submit-button">Submit</button>
-        <br><br><br><br>
-        <h3>Average number of emails received per person</h3>
-        Period: {{ emails_received }}
-        <br>
-        Year: {{ emails_received_year }}
-    </form>
-    </div>
-    
-    <div class="right" style="font-size: 26px;">
+<h2>Inputs</h2>
 
-        <h3>Total time reading emails per person</h3>
-        Period (mins)
-        <div class="jindent">Total: {{ time_per_person }}</div>
-        <div class="jindent">Non Essential: {{ time_per_person_notrelevant }}</div>
-        <div>Year (hours)</div>
-        <div class="jindent">Total: {{ time_per_year }}</div>
-        <div class="jindent">Non Essential: {{ time_per_year_notrelevant }}</div>
-        <br>
-        <h3>Staff time reading emails</h3>
-        Period (hours)
-        <div class="jindent">Total: {{ time_staff }}</div>
-        <div class="jindent">Non Essential: {{ time_staff_notrelevant }}</div>
-        <br><br> 
+<form method="post">
+{% csrf_token %}
 
-    </div>
+<body>
+<div class="content-container">
+<div class="table-container">
+
+    <table class="spreadsheet-table" style="width:60%">
+
+        <!-- Row 1 (Table Headers) -->
+        <tr style="background-color: white;">
+            <th class="border-right">Type</th>
+            <th class="border-right" colspan="2">Emails received</th>
+            <th colspan="2">Read time</th>
+            <th colspan="2">Action time</th>
+            <th  class="border-right" colspan="2">Response time</th>
+            <th colspan="2">Relevance</th>
+        </tr>
+
+        <tr class="small-text" style="background-color: white;">
+            <td class="border-right"></td>
+            <td>Lower</td>
+            <td class="border-right">Upper</td>
+            <td>Lower</td>
+            <td>Upper</td>
+            <td>Lower</td>
+            <td>Upper</td>
+            <td>Lower</td>
+            <td class="border-right">Upper</td>
+            <td></td>
+        </tr>
+    
+        <!-- Type 1 -->
+        <tr style="background-color: #6e8ab7;">
+            <td class="border-right">1</td>
+            <td class="input-cell">
+                <input type="number" name="N_lower1" value="{{ N_lower1 }}">
+            </td>
+            <td class="input-cell border-right">
+                <input type="number" name="N_upper1" value="{{ N_upper1 }}">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Rt_lower1" value="{{ Rt_lower1 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Rt_upper1" value="{{ Rt_upper1 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="At_lower1" value="{{ At_lower1 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="At_upper1" value="{{ At_upper1 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Wt_lower1" value="{{ Wt_lower1 }}" step="0.1">
+            </td>
+            <td class="input-cell border-right"">
+                <input type="number" name="Wt_upper1" value="{{ Wt_upper1 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Pr_rel1" value="{{ Pr_rel1 }}" step="0.1">
+            </td>
+        </tr>
+
+        <!-- Type 2 -->
+        <tr style="background-color: #E59538;">
+            <td class="border-right">2</td>
+            <td class="input-cell">
+                <input type="number" name="N_lower2" value="{{ N_lower2 }}">
+            </td>
+            <td class="input-cell border-right">
+                <input type="number" name="N_upper2" value="{{ N_upper2 }}">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Rt_lower2" value="{{ Rt_lower2 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Rt_upper2" value="{{ Rt_upper2 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="At_lower2" value="{{ At_lower2 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="At_upper2" value="{{ At_upper2 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Wt_lower2" value="{{ Wt_lower2 }}" step="0.1">
+            </td>
+            <td class="input-cell border-right">
+                <input type="number" name="Wt_upper2" value="{{ Wt_upper2 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Pr_rel2" value="{{ Pr_rel2 }}" step="0.1">
+            </td>
+        </tr>
+		
+        <!-- Type 3 -->
+        <tr style="background-color: #5B7553;">
+            <td class="border-right">3</td>
+            <td class="input-cell">
+                <input type="number" name="N_lower3" value="{{ N_lower3 }}">
+            </td>
+            <td class="input-cell border-right">
+                <input type="number" name="N_upper3" value="{{ N_upper3 }}">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Rt_lower3" value="{{ Rt_lower3 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Rt_upper3" value="{{ Rt_upper3 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="At_lower3" value="{{ At_lower3 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="At_upper3" value="{{ At_upper3 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Wt_lower3" value="{{ Wt_lower3 }}" step="0.1">
+            </td>
+            <td class="input-cell border-right">
+                <input type="number" name="Wt_upper3" value="{{ Wt_upper3 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Pr_rel3" value="{{ Pr_rel3 }}" step="0.1">
+            </td>
+        </tr>
+      
+    </table>
+    <br>
+    <button type="submit" class="submit-button">Submit</button>
+
+</form>
+
+<h2>Results</h2>
+
+<table class="result-table" style="width:60%">
+
+    <tr>
+        <th>Total number of emails</th>
+        <th>Total read time (mins)</th>
+    </tr>
+
+    <tr>
+        <td>{{ N_total_out }}</td>
+        <td>{{ t_total_out }}</td>
+    </tr>
+
+    <tr>
+        <th></th>
+        <th>Essential (mins)</th>
+    </tr>
+
+    <tr>
+        <td></td>
+        <td>{{ t_total_out }}</td>
+    </tr>
+
+
+</table>
 
 </div>
 
+    <div class="chart-container">
+        {% if pie_type %}
+        {{ pie_type|safe }}
+        {% else %}
+        <p>No graph was provided.</p>
+        {% endif %}
+        <br>
+        {% if pie_essential %}
+        {{ pie_essential|safe }}
+        {% else %}
+        <p>No graph was provided.</p>
+        {% endif %}
+    </div>
+
+</div>
+    
 </body>
+
 </html>

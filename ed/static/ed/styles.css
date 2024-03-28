@@ -1,6 +1,6 @@
 body {
     /* font-family: 'Arial', sans-serif; /* Example of a more interesting font */
-    font-family: 'Consolas', monospace; /* Example of a more interesting font */
+    /* font-family: 'Consolas', monospace; /* Example of a more interesting font */
     background-color: #e0f7fa; /* Light blue background */
     color: #000; /* Black font */
     font-size: 18px; /* Larger font size */
@@ -43,7 +43,7 @@ input[type="number"] {
     margin: 5px 0;
     font-size: 16px; /* Larger font size for inputs */
     background-color: rgb(0, 0, 0); /* Light blue background color */
-    color: rgb(255, 255, 255); /* Dark blue text color */
+    color: rgb(255, 255, 255); /* white text color */
 }
 
 .jindent {
@@ -74,4 +74,29 @@ input[type="number"] {
     border-radius: 4px; /* Rounded corners */
     cursor: pointer; /* Pointer cursor on hover */
     transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* For stochastic */
+.spreadsheet-table {
+    width: 100%; /* Set the table to span the full width of its container */
+    border-collapse: collapse; /* Collapse borders for a more compact look */
+}
+.spreadsheet-table th, .spreadsheet-table td {
+    border: 1px solid #000; /* Add borders to table cells */
+    padding: 5px; /* Add padding inside table cells */
+    text-align: left; /* Align text to the left */
+}
+.input-cell input {
+    width: 100%; /* Set input width to fill the cell */
+    box-sizing: border-box; /* Include padding and border in the input width */
+    padding: 5px; /* Add padding inside input */
+    margin: 0; /* Remove any default margin */
+    border: 1px solid #ccc; /* Add a border to the input */
+}
+input {
+    width: 100%;
+    border: none;
+    background: inherit;
+    padding: 4px;
+    text-align: center;
 }
