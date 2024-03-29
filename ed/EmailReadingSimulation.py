@@ -3,11 +3,14 @@ import matplotlib.pyplot as plt
 
 class EmailReadingSimulation:
     def __init__(self, 
-                 N_lower, N_upper, 
-                 Rt_lower, Rt_upper,
-                 At_lower, At_upper,
-                 Wt_lower, Wt_upper,
-                 Pr):
+                TeamSize,
+                Pay,
+                Period,
+                N_lower, N_upper, 
+                Rt_lower, Rt_upper,
+                At_lower, At_upper,
+                Wt_lower, Wt_upper,
+                Pr):
         
         # Assign all parameters to instance variables of the same name
         for name, value in locals().items():
@@ -15,11 +18,11 @@ class EmailReadingSimulation:
                 setattr(self, name, value)
         
         # derived values
-        self.Rt_guess = (Rt_upper - Rt_lower) / 2
+        self.Rt_guess = (Rt_upper + Rt_lower) / 2
         self.Rt_sd = (Rt_upper - Rt_lower) / 3.92  # Standard deviation calculation
-        self.At_guess = (At_upper - At_lower) / 2
+        self.At_guess = (At_upper + At_lower) / 2
         self.At_sd = (At_upper - At_lower) / 3.92  # Standard deviation calculation
-        self.Wt_guess = (Wt_upper - Wt_lower) / 2
+        self.Wt_guess = (Wt_upper + Wt_lower) / 2
         self.Wt_sd = (Wt_upper - Wt_lower) / 3.92  # Standard deviation calculation
         
         # initialise
@@ -41,12 +44,17 @@ class EmailReadingSimulation:
     def num2Char(self, x):
         """Convert numerical array to formatted string representation."""
         int95 = np.percentile(x, [2.5, 97.5])
-        return "{:.2f} ({:.2f}, {:.2f})".format(np.median(x), int95[0], int95[1])
+        return "{:.1f} ({:.1f} - {:.1f})".format(np.median(x), int95[0], int95[1])
     
     def num2Char2(self, x):
         """Convert numerical array to formatted string representation."""
         int95 = np.percentile(x, [2.5, 97.5])
-        return "{} ({}, {})".format(int(np.median(x)), int(int95[0]), int(int95[1]))
+        return "{} ({} - {})".format(int(np.median(x)), int(int95[0]), int(int95[1]))
+    
+    def num2Char_dollars(self, x):
+        """Convert numerical array to formatted string representation."""
+        int95 = np.percentile(x, [2.5, 97.5])
+        return "${:,.0f} (${:,.0f} - ${:,.0f})".format(np.median(x), int95[0], int95[1])
 
     def simulate(self):
         """Simulate the distribution of total reading times."""
@@ -137,3 +145,11 @@ class EmailReadingSimulation:
         self.t_essential_sum = self.num2Char(t_essential_vec)
         self.t_nonessential_sum = self.num2Char(t_nonessential_vec)
         self.N_total_sum = self.num2Char2(self.N_total_vec)
+
+        # Staff values
+        self.staff_total = self.num2Char2( (260/self.Period) * (np.sum(self.TeamSize * total_time_by_type, axis=1)/60) )
+        self.staff_total_cost = self.num2Char_dollars( (260/self.Period) * self.Pay * (np.sum(self.TeamSize * total_time_by_type, axis=1)/60) )
+        self.staff_essential = self.num2Char2( (260/self.Period) * (np.sum(self.TeamSize * total_time_by_type_essential, axis=1)/60) )
+        self.staff_essential_cost = self.num2Char_dollars( (260/self.Period) * self.Pay * (np.sum(self.TeamSize * total_time_by_type_essential, axis=1)/60) )
+        self.staff_nonessential = self.num2Char2( (260/self.Period) * (np.sum(self.TeamSize * total_time_by_type_nonessential, axis=1)/60) )
+        self.staff_nonessential_cost = self.num2Char_dollars( (260/self.Period) * self.Pay * (np.sum(self.TeamSize * total_time_by_type_nonessential, axis=1)/60) )

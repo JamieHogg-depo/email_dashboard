@@ -1,7 +1,8 @@
 from datetime import datetime
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -170,16 +171,19 @@ def teams_stochastic(request):
 
     # create context dictionary
     context = {}
+    context['TeamSize'] = 20
+    context['Pay'] = 80
+    context['Period'] = 1
     for type_num in range(1,4):
         context[f'N_lower{type_num}'] = 1
-        context[f'N_upper{type_num}'] = 2
-        context[f'Rt_lower{type_num}'] = 1
-        context[f'Rt_upper{type_num}'] = 3
-        context[f'Wt_lower{type_num}'] = 1
-        context[f'Wt_upper{type_num}'] = 3
-        context[f'At_lower{type_num}'] = 1
-        context[f'At_upper{type_num}'] = 3
-        context[f'Pr_rel{type_num}'] = 0.5
+        context[f'N_upper{type_num}'] = 1
+        context[f'Rt_lower{type_num}'] = 0.9
+        context[f'Rt_upper{type_num}'] = 1.1
+        context[f'Wt_lower{type_num}'] = 0.9
+        context[f'Wt_upper{type_num}'] = 1.1
+        context[f'At_lower{type_num}'] = 0.9
+        context[f'At_upper{type_num}'] = 1.1
+        context[f'Pr_rel{type_num}'] = 1
 
     # create empty lists
     N_lower = []
@@ -194,6 +198,9 @@ def teams_stochastic(request):
 
     if request.method == 'POST':
         # Retrieve numbers from the form
+        context['TeamSize'] = int(request.POST.get('TeamSize', 0))
+        context['Pay'] = int(request.POST.get('Pay', 0))
+        context['Period'] = int(request.POST.get('Period', 0))
         for type_num in range(1,4):  # This will loop through 1, 2, 3
             # for Context vector
             context[f'N_lower{type_num}'] = int(request.POST.get(f'N_lower{type_num}', 0))
@@ -216,8 +223,27 @@ def teams_stochastic(request):
             Wt_upper.append(float(request.POST.get(f'Wt_upper{type_num}', 0.0)))
             Pr.append(float(request.POST.get(f'Pr_rel{type_num}', 0.0)))
 
+            if context[f'N_lower{type_num}'] > context[f'N_upper{type_num}']:
+                error_message = "Error: Upper value must be greater than lower value.<br>Please click back in your browser and check your values for Emails received."
+                return HttpResponseBadRequest(error_message)
+            
+            if context[f'Rt_lower{type_num}'] >= context[f'Rt_upper{type_num}']:
+                error_message = "Error: Upper value must be greater than lower value.<br>Please click back in your browser and check your values for Read time."
+                return HttpResponseBadRequest(error_message)
+            
+            if context[f'At_lower{type_num}'] >= context[f'At_upper{type_num}']:
+                error_message = "Error: Upper value must be greater than lower value.<br>Please click back in your browser and check your values for Action time."
+                return HttpResponseBadRequest(error_message)
+            
+            if context[f'Wt_lower{type_num}'] >= context[f'Wt_upper{type_num}']:
+                error_message = "Error: Upper value must be greater than lower value.<br>Please click back in your browser and check your values for Response time."
+                return HttpResponseBadRequest(error_message)
+
         # Run simulation
         sm = ed.EmailReadingSimulation(
+            TeamSize=context['TeamSize'],
+            Pay=context['Pay'],
+            Period=context['Period'],
             N_lower=np.array(N_lower),
             N_upper=np.array(N_upper),
             Rt_lower=np.array(Rt_lower),
@@ -238,27 +264,39 @@ def teams_stochastic(request):
         context['t_essential_sum'] = sm.t_essential_sum
         context['t_nonessential_sum'] = sm.t_nonessential_sum
 
+        # staff values
+        context['staff_total'] = sm.staff_total
+        context['staff_total_cost'] = sm.staff_total_cost
+        context['staff_essential'] = sm.staff_essential
+        context['staff_essential_cost'] = sm.staff_essential_cost
+        context['staff_nonessential'] = sm.staff_nonessential
+        context['staff_nonessential_cost'] = sm.staff_nonessential_cost
+
         # Create pie chart by type
         fig = px.pie(values=sm.median_total_type, 
                      names=['Type 1', 'Type 2', 'Type 3'],
                      color_discrete_sequence=['#6e8ab7', '#E59538', '#5B7553'])
         fig.update_layout(
-            title="Total time",
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            showlegend=False
+            showlegend=False,
+            width=450,  # Specify the width
+            height=450,  # Specify the height
+            font=dict(size=20)
         )
         context['pie_type'] = plotly.offline.plot(fig, output_type='div')
 
         # Create pie chart by relevance
         fig = px.pie(values=[sm.median_total_essential, sm.median_total_nonessential], 
                      names=['Essential', 'Nonessential'],
-                     color_discrete_sequence=['#000000', '#f0f0f0'])
+                     color_discrete_sequence=['#cccccc', '#f76565'])
         fig.update_layout(
-            title="Total time",
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            showlegend=False
+            showlegend=False,
+            width=450,  # Specify the width
+            height=450,  # Specify the height
+            font=dict(size=20)
         )
         context['pie_essential'] = plotly.offline.plot(fig, output_type='div')
 

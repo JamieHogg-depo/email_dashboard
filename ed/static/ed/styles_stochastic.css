@@ -2,19 +2,15 @@
 body {
     background: linear-gradient(45deg, #7bcbf08c, #b395bba6);
 }
-.content-container {
-    display: flex;
-    justify-content: center; /* Aligns children (table and chart) horizontally in the center */
-    align-items: flex-start; /* Aligns children to the top */
-}
-.table-container {
-    flex: 0 0 70%; /* Allows the table to grow and take up necessary space */
-    max-width: 70%;
-}
-.chart-container {
-    flex: 0 0 30%; /* Allows the chart to grow and take up necessary space */
-    max-width: 30%;
-}
+.vertical-line {
+    height: 100%; /* Adjust the height as needed */
+    width: 1px; /* This controls the width of the line */
+    background-color: black; /* This sets the line color */
+    position: fixed; /* Or 'absolute' */
+    left: 50%; /* Adjust this value to position the line horizontally */
+  }
+  
+
 
 /* New containers */
 .container {
@@ -22,13 +18,18 @@ body {
 }
 .column {
     padding: 10px;
-    border: 1px solid #ccc; /* Just for visual distinction */
 }
 .left {
-    flex: 2; /* Adjust this value to change the left column width */
+    flex: 1.5; /* Adjust this value to change the left column width */
+}
+.left-top {
+    flex: 1; /* Adjust this value to change the left column width */
+}
+.right-top {
+    flex: 3; /* Adjust this value to change the left column width */
 }
 .middle {
-    flex: 1; /* Adjust this value to change the middle column width */
+    flex: 1; /* Adjust this value to change the left column width */
 }
 .right {
     flex: 1; /* Adjust this value to change the right column width */
@@ -101,6 +102,9 @@ input {
 /* Add a class to the last 'Emails received' column cells in your HTML */
 .border-right {
     border-right: 2px solid #000; /* This will add a solid line to the right of these cells */
+}
+.border-top {
+    border-top: 2px solid #000; /* This will add a solid line to the right of these cells */
 }
 
 /* Result table */
