@@ -7,17 +7,32 @@ body {
     justify-content: center; /* Aligns children (table and chart) horizontally in the center */
     align-items: flex-start; /* Aligns children to the top */
 }
-
 .table-container {
     flex: 0 0 70%; /* Allows the table to grow and take up necessary space */
     max-width: 70%;
 }
-
 .chart-container {
     flex: 0 0 30%; /* Allows the chart to grow and take up necessary space */
     max-width: 30%;
 }
 
+/* New containers */
+.container {
+    display: flex;
+}
+.column {
+    padding: 10px;
+    border: 1px solid #ccc; /* Just for visual distinction */
+}
+.left {
+    flex: 2; /* Adjust this value to change the left column width */
+}
+.middle {
+    flex: 1; /* Adjust this value to change the middle column width */
+}
+.right {
+    flex: 1; /* Adjust this value to change the right column width */
+}
 
 /* Submit Buttom */
 .parent-container {

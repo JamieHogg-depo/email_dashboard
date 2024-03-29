@@ -8,6 +8,7 @@ class EmailReadingSimulation:
                  At_lower, At_upper,
                  Wt_lower, Wt_upper,
                  Pr):
+        
         # Assign all parameters to instance variables of the same name
         for name, value in locals().items():
             if name != 'self':
@@ -52,62 +53,87 @@ class EmailReadingSimulation:
         rt_total = np.zeros(1000)
         at_total = np.zeros(1000)
         wt_total = np.zeros(1000)
-        t_total = np.zeros(1000)
-        N_total = np.zeros(1000)
+        t_total_vec = np.zeros(1000)
+        t_essential_vec = np.zeros(1000)
+        t_nonessential_vec = np.zeros(1000)
+        N_total_vec = np.zeros(1000)
         total_time_by_type = np.zeros([1000,3])
-        total_time_by_type_relevant = np.zeros([1000,3])
+        total_time_by_type_essential = np.zeros([1000,3])
+        total_time_by_type_nonessential = np.zeros([1000,3])
 
         # run for 1000 iterations
         for s in range(1000):
         # for each iteration draw a set of reading, action and writing times for each type
         # doing this loop once is like a single dataset
             
-            rt = np.empty(0) # array with size based on N_sim
-            at = np.empty(0) # array with size based on N_sim
-            wt = np.empty(0) # array with size based on N_sim
-            N_sim = np.zeros(3, dtype=int) # number of emails of each type
-            for i in range(3):
+            # create list of lists to store vectors of times for each type
+            rt_all_types = [[], [], []]
+            at_all_types = [[], [], []]
+            wt_all_types = [[], [], []]
+
+            # initilise number of emails of each type
+            N_sim = np.zeros(3, dtype=int)
+
+            for i in range(3): # type
 
                 # Draw number of emails
                 N_sim[i] = np.random.randint(self.N_lower[i], self.N_upper[i]+1, 1)
                
-                # simulate whether each email is relevant or not
-                binary_relevant = np.random.binomial(1, self.Pr[i], N_sim[i])
+                # simulate whether each email is essential or not
+                binary_essential = np.random.binomial(1, self.Pr[i], N_sim[i])
+                binary_nonessential = 1 - binary_essential
                 
-                 # simulate reading, action and writing times
+                 # simulate times for steps (reading, action and writing times)
                 rt = self.gammaDraw(self.Rt_guess[i], self.Rt_sd[i], N_sim[i])
                 at = self.gammaDraw(self.At_guess[i], self.At_sd[i], N_sim[i])
                 wt = self.gammaDraw(self.Wt_guess[i], self.Wt_sd[i], N_sim[i])
 
                 # Derive total time by type
+                    # summed across steps
                 # add to matrix
                 total_time_by_type[s,i] = rt.sum()+at.sum()+wt.sum()
-                total_time_by_type_relevant[s,i] = np.sum( (rt + at + wt) * binary_relevant)
+                total_time_by_type_essential[s,i] = np.sum( (rt + at + wt) * binary_essential)
+                total_time_by_type_nonessential[s,i] = np.sum( (rt + at + wt) * binary_nonessential)
 
-                # add other types to initial vectors
-                rt = np.append(rt, self.gammaDraw(self.Rt_guess[i], self.Rt_sd[i], N_sim[i]))
-                at = np.append(at, self.gammaDraw(self.At_guess[i], self.At_sd[i], N_sim[i]))
-                wt = np.append(wt, self.gammaDraw(self.Wt_guess[i], self.Wt_sd[i], N_sim[i]))
+                # add types to list of arrays
+                rt_all_types[i] = rt
+                at_all_types[i] = at
+                wt_all_types[i] = wt
                 # rt, at and wt are discarded each iteration of t
-            rt_total[s] = rt.sum()
-            at_total[s] = at.sum()
-            wt_total[s] = wt.sum()
-            t_total[s] = rt_total[s] + at_total[s] + wt_total[s]
-            N_total[s] = N_sim.sum()
+
+            rt_total[s] = sum(np.sum(array) for array in rt_all_types)
+            at_total[s] = sum(np.sum(array) for array in at_all_types)
+            wt_total[s] = sum(np.sum(array) for array in wt_all_types)
+
+            # total number of emails
+            N_total_vec[s] = N_sim.sum()
+
+        # each element is of t_total_vec is the same as rowwise sum of total_time_by_type
+        t_total_vec = np.sum(total_time_by_type, axis=1)
+        t_essential_vec = np.sum(total_time_by_type_essential, axis=1)
+        t_nonessential_vec = np.sum(total_time_by_type_nonessential, axis=1)
 
         # assign as attributes
         self.rt_total_vec = rt_total
         self.at_total_vec = at_total
         self.wt_total_vec = wt_total
-        self.t_total_vec = t_total
-        self.N_total_vec = N_total
+        self.N_total_vec = N_total_vec
         self.total_time_by_type = total_time_by_type
+
+        # get key output for pie charts
         self.median_total_type = np.median(total_time_by_type, axis=0)
-        self.median_total_type_relevant = np.median(total_time_by_type_relevant, axis=0)
+        self.median_total_essential = np.median(t_essential_vec)
+        self.median_total_nonessential = np.median(t_nonessential_vec)
 
         # format output
         self.rt_total_sum = self.num2Char(self.rt_total_vec)
         self.wt_total_sum = self.num2Char(self.at_total_vec)
         self.at_total_sum = self.num2Char(self.wt_total_vec)
-        self.t_total_sum = self.num2Char(self.t_total_vec)
+
+        ## ----
+        # OUTPUTS FOR DASHBOARD
+        ## ----
+        self.t_total_sum = self.num2Char(t_total_vec)
+        self.t_essential_sum = self.num2Char(t_essential_vec)
+        self.t_nonessential_sum = self.num2Char(t_nonessential_vec)
         self.N_total_sum = self.num2Char2(self.N_total_vec)

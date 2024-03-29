@@ -234,7 +234,9 @@ def teams_stochastic(request):
         
         # Use class to provide outputs
         context['N_total_out'] = sm.N_total_sum
-        context['t_total_out'] = sm.t_total_sum
+        context['t_total_sum'] = sm.t_total_sum
+        context['t_essential_sum'] = sm.t_essential_sum
+        context['t_nonessential_sum'] = sm.t_nonessential_sum
 
         # Create pie chart by type
         fig = px.pie(values=sm.median_total_type, 
@@ -249,9 +251,9 @@ def teams_stochastic(request):
         context['pie_type'] = plotly.offline.plot(fig, output_type='div')
 
         # Create pie chart by relevance
-        fig = px.pie(values=sm.median_total_type_relevant, 
-                     names=['Type 1', 'Type 2', 'Type 3'],
-                     color_discrete_sequence=['#6e8ab7', '#E59538', '#5B7553'])
+        fig = px.pie(values=[sm.median_total_essential, sm.median_total_nonessential], 
+                     names=['Essential', 'Nonessential'],
+                     color_discrete_sequence=['#000000', '#f0f0f0'])
         fig.update_layout(
             title="Total time",
             paper_bgcolor='rgba(0,0,0,0)',
