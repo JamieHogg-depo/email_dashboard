@@ -437,3 +437,24 @@ def basic_nouncertainty(request):
 
     # Pass the context dict to be rendered in the html file
     return render(request, 'ed/basic_nouncertainty.html', context) # pass dictionary
+
+## ----------------------------------------------------------------------------
+## Gamma Plot ## --------------------------------------------------------------
+## ----------------------------------------------------------------------------
+def gamma_dist(request):
+
+    # create context dictionary
+    context = {'lower': 4,
+               'upper':6}
+
+    if request.method == 'POST':
+        # Retrieve numbers from the form
+        context['lower'] = float(request.POST.get('lower', 0))
+        context['upper'] = float(request.POST.get('upper', 0))
+
+        # Create pie chart by type
+        out = ed.plot_gamma_distribution(context['lower'] , context['upper'] )
+        context['pdf'] = plotly.offline.plot(out, output_type='div')
+
+    # Pass the context dict to be rendered in the html file
+    return render(request, 'ed/gamma_dist.html', context) # pass dictionary

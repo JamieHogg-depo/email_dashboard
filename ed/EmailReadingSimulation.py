@@ -1,5 +1,7 @@
 import numpy as np
+import scipy.stats as stats
 import matplotlib.pyplot as plt
+import plotly.express as px
 
 class EmailReadingSimulation:
     def __init__(self, 
@@ -222,7 +224,7 @@ class EmailReadingSimulation:
         # total number of emails
         N_total_vec = N_sim.sum()
 
-        # each element is of t_total_vec is the same as rowwise sum of total_time_by_type
+        # each element is of t_total_vec is the same as row-wise sum of total_time_by_type
         t_total_vec = np.sum(total_time_by_type)
         t_essential_vec = np.sum(total_time_by_type_essential)
         t_nonessential_vec = np.sum(total_time_by_type_nonessential)
@@ -259,3 +261,54 @@ class EmailReadingSimulation:
         self.staff_essential_cost = self.num2Char_dollars( (260/self.Period) * self.Pay * (np.sum(self.TeamSize * total_time_by_type_essential)/60), include_confidence_interval=False )
         self.staff_nonessential = self.num2Char2( (260/self.Period) * (np.sum(self.TeamSize * total_time_by_type_nonessential)/60), include_confidence_interval=False )
         self.staff_nonessential_cost = self.num2Char_dollars( (260/self.Period) * self.Pay * (np.sum(self.TeamSize * total_time_by_type_nonessential)/60), include_confidence_interval=False )
+
+def plot_gamma_distribution(lower, upper):
+    """
+    Plot a gamma distribution based on a specified range.
+    
+    This function calculates the mean and standard deviation of a gamma distribution
+    given the lower and upper bounds of a range. It then calculates the shape (alpha)
+    and scale (theta) parameters of the gamma distribution from the mean and standard
+    deviation. The function plots the probability density function (PDF) of the
+    gamma distribution over a range of values.
+    
+    Parameters:
+    - lower (float): The lower bound of the range from which the mean and standard 
+      deviation are calculated.
+    - upper (float): The upper bound of the range from which the mean and standard 
+      deviation are calculated.
+    
+    The mean is calculated as the midpoint of the lower and upper bounds, and the 
+    standard deviation is derived based on the assumption that the range represents 
+    approximately 99.7% (3 sigma) of the data values.
+    
+    Returns:
+    None. This function directly plots the gamma distribution using matplotlib.
+    
+    Example:
+    >>> plot_gamma_distribution(5, 15)
+    This will plot a gamma distribution with a mean of 10 and a standard deviation
+    calculated based on the input range.
+    """
+    # Get mean and std from low and upper 
+    mean = (upper + lower) / 2
+    std = (upper - lower) / 3.92
+
+    # Calculate alpha and theta from mean and std
+    alpha = mean**2 / std**2
+    theta = std**2 / mean
+    
+    # Define the gamma distribution
+    gamma_dist = stats.gamma(a=alpha, scale=theta)
+    
+    # Generate x values
+    x = np.linspace(0, mean + 4*std, 1000)
+    
+    # Calculate the PDF values for x
+    pdf = gamma_dist.pdf(x)
+    
+    # Plotting
+    return px.line(x=x, y=pdf)
+
+
+
