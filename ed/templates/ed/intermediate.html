@@ -6,13 +6,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator</title>
-    <link rel="stylesheet" href="{% static 'ed/styles_stochastic.css' %}">
+    <link rel="stylesheet" href="{% static 'ed/styles.css' %}">
 </head>
 
 <!-- BODY -->
 <body> 
 
-<h1>Basic Calculator (no uncertainty)</h1>
+<h1>Intermediate Calculator (with uncertainty)</h1>
 
 <!-- Return to landing page -->
 <div>
@@ -77,27 +77,52 @@
         <!-- Row 1 (Table Headers) -->
         <tr style="background-color: white;">
             <th class="border-right">Type</th>
-            <th class="border-right">Emails received</th>
-            <th>Read time (mins)</th>
-            <th>Action time (mins)</th>
-            <th  class="border-right">Response time (mins)</th>
-            <th>Essential</th>
+            <th class="border-right" colspan="2">Emails received</th>
+            <th colspan="2">Read time (mins)</th>
+            <th colspan="2">Action time (mins)</th>
+            <th  class="border-right" colspan="2">Response time (mins)</th>
+            <th colspan="2">Essential</th>
         </tr>
-    
+
+        <tr class="small-text" style="background-color: white;">
+            <td class="border-right"></td>
+            <td>Lower</td>
+            <td class="border-right">Upper</td>
+            <td>Lower</td>
+            <td>Upper</td>
+            <td>Lower</td>
+            <td>Upper</td>
+            <td>Lower</td>
+            <td class="border-right">Upper</td>
+            <td>Probability</td>
+        </tr>
+
         <!-- Type 1 -->
         <tr style="background-color: #6e8ab7;">
             <td class="border-right">1</td>
-            <td class="input-cell border-right">
-                <input type="number" name="N_1" value="{{ N_1 }}">
-            </td>
             <td class="input-cell">
-                <input type="number" name="Rt_1" value="{{ Rt_1 }}" step="0.1">
-            </td>
-            <td class="input-cell">
-                <input type="number" name="At_1" value="{{ At_1 }}" step="0.1">
+                <input type="number" name="N_lower1" value="{{ N_lower1 }}">
             </td>
             <td class="input-cell border-right">
-                <input type="number" name="Wt_1" value="{{ Wt_1 }}" step="0.1">
+                <input type="number" name="N_upper1" value="{{ N_upper1 }}">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Rt_lower1" value="{{ Rt_lower1 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Rt_upper1" value="{{ Rt_upper1 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="At_lower1" value="{{ At_lower1 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="At_upper1" value="{{ At_upper1 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Wt_lower1" value="{{ Wt_lower1 }}" step="0.1">
+            </td>
+            <td class="input-cell border-right"">
+                <input type="number" name="Wt_upper1" value="{{ Wt_upper1 }}" step="0.1">
             </td>
             <td class="input-cell">
                 <input type="number" name="Pr_rel1" value="{{ Pr_rel1 }}" step="0.1">
@@ -107,17 +132,29 @@
         <!-- Type 2 -->
         <tr style="background-color: #E59538;">
             <td class="border-right">2</td>
-            <td class="input-cell border-right">
-                <input type="number" name="N_2" value="{{ N_2 }}">
-            </td>
             <td class="input-cell">
-                <input type="number" name="Rt_2" value="{{ Rt_2 }}" step="0.1">
-            </td>
-            <td class="input-cell">
-                <input type="number" name="At_2" value="{{ At_2 }}" step="0.1">
+                <input type="number" name="N_lower2" value="{{ N_lower2 }}">
             </td>
             <td class="input-cell border-right">
-                <input type="number" name="Wt_2" value="{{ Wt_2 }}" step="0.1">
+                <input type="number" name="N_upper2" value="{{ N_upper2 }}">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Rt_lower2" value="{{ Rt_lower2 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Rt_upper2" value="{{ Rt_upper2 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="At_lower2" value="{{ At_lower2 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="At_upper2" value="{{ At_upper2 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Wt_lower2" value="{{ Wt_lower2 }}" step="0.1">
+            </td>
+            <td class="input-cell border-right">
+                <input type="number" name="Wt_upper2" value="{{ Wt_upper2 }}" step="0.1">
             </td>
             <td class="input-cell">
                 <input type="number" name="Pr_rel2" value="{{ Pr_rel2 }}" step="0.1">
@@ -127,17 +164,29 @@
         <!-- Type 3 -->
         <tr style="background-color: #5B7553;">
             <td class="border-right">3</td>
-            <td class="input-cell border-right">
-                <input type="number" name="N_3" value="{{ N_3 }}">
-            </td>
             <td class="input-cell">
-                <input type="number" name="Rt_3" value="{{ Rt_3 }}" step="0.1">
-            </td>
-            <td class="input-cell">
-                <input type="number" name="At_3" value="{{ At_3 }}" step="0.1">
+                <input type="number" name="N_lower3" value="{{ N_lower3 }}">
             </td>
             <td class="input-cell border-right">
-                <input type="number" name="Wt_3" value="{{ Wt_3 }}" step="0.1">
+                <input type="number" name="N_upper3" value="{{ N_upper3 }}">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Rt_lower3" value="{{ Rt_lower3 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Rt_upper3" value="{{ Rt_upper3 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="At_lower3" value="{{ At_lower3 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="At_upper3" value="{{ At_upper3 }}" step="0.1">
+            </td>
+            <td class="input-cell">
+                <input type="number" name="Wt_lower3" value="{{ Wt_lower3 }}" step="0.1">
+            </td>
+            <td class="input-cell border-right">
+                <input type="number" name="Wt_upper3" value="{{ Wt_upper3 }}" step="0.1">
             </td>
             <td class="input-cell">
                 <input type="number" name="Pr_rel3" value="{{ Pr_rel3 }}" step="0.1">

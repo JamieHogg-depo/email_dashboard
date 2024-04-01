@@ -9,10 +9,8 @@
         <h1>Email Efficiency Calculator for Good Directions</h1>
         Select the version of the calculator!
         <div class="mt-4">
-            <!-- <a href="{% url 'basic' %}" class="btn btn-primary">Basic</a> -->
-            <a href="{% url 'basic_nouncertainty' %}" class="btn btn-primary">Basic Calculator (no uncertainty)</a>
-             <!-- <a href="{% url 'teams' %}" class="btn btn-success">Teams</a> --> 
-            <a href="{% url 'teams_stochastic' %}" class="btn btn-info">Intermediate Calculator (with uncertainty)</a>
+            <a href="{% url 'basic' %}" class="btn btn-primary">Basic Calculator (no uncertainty)</a>
+            <a href="{% url 'intermediate' %}" class="btn btn-info">Intermediate Calculator (with uncertainty)</a>
         </div>
         <div class="mt-4">
             <a href="{% url 'gamma_dist' %}" class="btn btn-success">Explore the distribution of times</a>

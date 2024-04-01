@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator</title>
-    <link rel="stylesheet" href="{% static 'ed/styles_stochastic.css' %}">
+    <link rel="stylesheet" href="{% static 'ed/styles.css' %}">
 </head>
 
 <!-- BODY -->
@@ -55,11 +55,13 @@
 <!-- Plot ---------------------------------------------------------------- -->
 <!-- --------------------------------------------------------------------- -->
 
-{% if pdf %}
-{{ pdf|safe }}
-{% else %}
-<p>No graph was provided.</p>
-{% endif %}
+<div style="width:50%">
+    {% if pdf %}
+    {{ pdf|safe }}
+    {% else %}
+    <p>No graph was provided.</p>
+    {% endif %}
+</div>
 
 <!-- BODY -->
 </body> 
