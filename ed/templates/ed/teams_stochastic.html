@@ -12,7 +12,13 @@
 <!-- BODY -->
 <body> 
 
-<h1>Email efficiency calculator</h1>
+<h1>Email Efficiency Calculator</h1>
+
+<!-- Return to landing page -->
+<div>
+    <!-- Button to return to the landing page -->
+    <a href="{% url 'landing' %}" class="btn btn-primary">Return</a>
+</div>
 
 <hr style="height: 3px; background-color: black; border: none;">
 
@@ -90,7 +96,7 @@
             <td class="border-right">Upper</td>
             <td>Probability</td>
         </tr>
-    
+
         <!-- Type 1 -->
         <tr style="background-color: #6e8ab7;">
             <td class="border-right">1</td>
@@ -229,15 +235,15 @@
     </tr>
 
     <tr>
-        <th>Total</th>
-        <th style="background-color: #cccccc;">Essential</th>
-        <th style="background-color: #f76565;">Nonessential</th>
+        <th style="width: 32%;">Total</th>
+        <th style="width: 32%; background-color: #cccccc;">Essential</th>
+        <th style="width: 32%; background-color: #f76565;">Nonessential</th>
     </tr>
 
     <tr>
-        <td>{{ t_total_sum }}</td>
-        <td style="background-color: #cccccc;">{{ t_essential_sum }}</td>
-        <td style="background-color: #f76565;">{{ t_nonessential_sum }}</td>
+        <td style="width: 32%;">{{ t_total_sum }}</td>
+        <td style="width: 32%; background-color: #cccccc;">{{ t_essential_sum }}</td>
+        <td style="width: 32%; background-color: #f76565;">{{ t_nonessential_sum }}</td>
     </tr>
 
 </table>
@@ -255,15 +261,15 @@
     
 
     <tr>
-        <th>Total</th>
-        <th style="background-color: #cccccc;">Essential</th>
-        <th style="background-color: #f76565;">Nonessential</th>
+        <th style="width: 32%;">Total</th>
+        <th style="width: 32%; background-color: #cccccc;">Essential</th>
+        <th style="width: 32%; background-color: #f76565;">Nonessential</th>
     </tr>
 
     <tr>
-        <td>{{ staff_total }}</td>
-        <td style="background-color: #cccccc;">{{ staff_essential }}</td>
-        <td style="background-color: #f76565;">{{ staff_nonessential }}</td>
+        <td style="width: 32%;">{{ staff_total }}</td>
+        <td style="width: 32%; background-color: #cccccc;">{{ staff_essential }}</td>
+        <td style="width: 32%; background-color: #f76565;">{{ staff_nonessential }}</td>
     </tr>
 
 </table>
@@ -278,15 +284,15 @@
     
 
     <tr>
-        <th>Total</th>
-        <th style="background-color: #cccccc;">Essential</th>
-        <th style="background-color: #f76565;">Nonessential</th>
+        <th style="width: 32%;">Total</th>
+        <th style="width: 32%; background-color: #cccccc;">Essential</th>
+        <th style="width: 32%; background-color: #f76565;">Nonessential</th>
     </tr>
 
     <tr>
-        <td>{{ staff_total_cost }}</td>
-        <td style="background-color: #cccccc;">{{ staff_essential_cost }}</td>
-        <td style="background-color: #f76565;">{{ staff_nonessential_cost }}</td>
+        <td style="width: 32%;">{{ staff_total_cost }}</td>
+        <td style="width: 32%; background-color: #cccccc;">{{ staff_essential_cost }}</td>
+        <td style="width: 32%; background-color: #f76565;">{{ staff_nonessential_cost }}</td>
     </tr>
 
 </table>

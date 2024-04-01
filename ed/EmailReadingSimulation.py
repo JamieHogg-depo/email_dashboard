@@ -6,11 +6,25 @@ class EmailReadingSimulation:
                 TeamSize,
                 Pay,
                 Period,
-                N_lower, N_upper, 
-                Rt_lower, Rt_upper,
-                At_lower, At_upper,
-                Wt_lower, Wt_upper,
                 Pr):
+        
+        # Assign all parameters to instance variables of the same name
+        for name, value in locals().items():
+            if name != 'self':
+                setattr(self, name, value)
+        
+    def setupDim(self, N, Rt, At, Wt):
+        
+        # Assign all parameters to instance variables of the same name
+        for name, value in locals().items():
+            if name != 'self':
+                setattr(self, name, value)
+        
+    def setupSim(self, 
+                 N_lower, N_upper, 
+                 Rt_lower, Rt_upper,
+                 At_lower, At_upper,
+                 Wt_lower, Wt_upper):
         
         # Assign all parameters to instance variables of the same name
         for name, value in locals().items():
@@ -41,20 +55,29 @@ class EmailReadingSimulation:
         theta = sigma ** 2 / mu
         return np.random.gamma(k, theta, n)
 
-    def num2Char(self, x):
+    def num2Char(self, x, include_confidence_interval=True):
         """Convert numerical array to formatted string representation."""
-        int95 = np.percentile(x, [2.5, 97.5])
-        return "{:.1f} ({:.1f} - {:.1f})".format(np.median(x), int95[0], int95[1])
+        if include_confidence_interval:
+            int95 = np.percentile(x, [2.5, 97.5])
+            return "{:.1f} ({:.1f} - {:.1f})".format(np.median(x), int95[0], int95[1])
+        else:
+            return "{:.1f}".format(np.median(x)) 
     
-    def num2Char2(self, x):
+    def num2Char2(self, x, include_confidence_interval=True):
         """Convert numerical array to formatted string representation."""
-        int95 = np.percentile(x, [2.5, 97.5])
-        return "{} ({} - {})".format(int(np.median(x)), int(int95[0]), int(int95[1]))
+        if include_confidence_interval:
+            int95 = np.percentile(x, [2.5, 97.5])
+            return "{} ({} - {})".format(int(np.median(x)), int(int95[0]), int(int95[1]))
+        else:
+            return "{}".format(int(np.median(x)))
     
-    def num2Char_dollars(self, x):
+    def num2Char_dollars(self, x, include_confidence_interval=True):
         """Convert numerical array to formatted string representation."""
-        int95 = np.percentile(x, [2.5, 97.5])
-        return "${:,.0f} (${:,.0f} - ${:,.0f})".format(np.median(x), int95[0], int95[1])
+        if include_confidence_interval:
+            int95 = np.percentile(x, [2.5, 97.5])
+            return "${:,.0f} (${:,.0f} - ${:,.0f})".format(np.median(x), int95[0], int95[1])
+        else:
+            return "${:,.0f}".format(np.median(x))
 
     def simulate(self):
         """Simulate the distribution of total reading times."""
@@ -135,8 +158,8 @@ class EmailReadingSimulation:
 
         # format output
         self.rt_total_sum = self.num2Char(self.rt_total_vec)
-        self.wt_total_sum = self.num2Char(self.at_total_vec)
-        self.at_total_sum = self.num2Char(self.wt_total_vec)
+        self.at_total_sum = self.num2Char(self.at_total_vec)
+        self.wt_total_sum = self.num2Char(self.wt_total_vec)
 
         ## ----
         # OUTPUTS FOR DASHBOARD
@@ -153,3 +176,86 @@ class EmailReadingSimulation:
         self.staff_essential_cost = self.num2Char_dollars( (260/self.Period) * self.Pay * (np.sum(self.TeamSize * total_time_by_type_essential, axis=1)/60) )
         self.staff_nonessential = self.num2Char2( (260/self.Period) * (np.sum(self.TeamSize * total_time_by_type_nonessential, axis=1)/60) )
         self.staff_nonessential_cost = self.num2Char_dollars( (260/self.Period) * self.Pay * (np.sum(self.TeamSize * total_time_by_type_nonessential, axis=1)/60) )
+
+    def deterministic(self):
+
+        # Create totals per type
+        total_time_by_type = np.zeros(3)
+        total_time_by_type_essential = np.zeros(3)
+        total_time_by_type_nonessential = np.zeros(3)
+
+        # create list of lists to store vectors of times for each type
+        rt_all_types = [[], [], []]
+        at_all_types = [[], [], []]
+        wt_all_types = [[], [], []]
+
+        # initilise number of emails of each type
+        N_sim = np.zeros(3, dtype=int)
+
+        for i in range(3): # type
+
+            # Draw number of emails
+            N_sim[i] = self.N[i]
+            
+                # simulate times for steps (reading, action and writing times)
+            rt = np.full(N_sim[i], self.Rt[i])
+            at = np.full(N_sim[i], self.At[i])
+            wt = np.full(N_sim[i], self.Wt[i])
+
+            # Derive total time by type
+                # summed across steps
+            # add to matrix
+            total_time_by_type[i] = rt.sum()+at.sum()+wt.sum()
+            total_time_by_type_essential[i] = np.sum( (rt + at + wt) ) * self.Pr[i]
+            total_time_by_type_nonessential[i] = np.sum( (rt + at + wt) ) * (1 - self.Pr[i])
+
+            # add types to list of arrays
+            rt_all_types[i] = rt
+            at_all_types[i] = at
+            wt_all_types[i] = wt
+            # rt, at and wt are discarded each iteration of t
+
+        rt_total = sum(np.sum(array) for array in rt_all_types)
+        at_total = sum(np.sum(array) for array in at_all_types)
+        wt_total = sum(np.sum(array) for array in wt_all_types)
+
+        # total number of emails
+        N_total_vec = N_sim.sum()
+
+        # each element is of t_total_vec is the same as rowwise sum of total_time_by_type
+        t_total_vec = np.sum(total_time_by_type)
+        t_essential_vec = np.sum(total_time_by_type_essential)
+        t_nonessential_vec = np.sum(total_time_by_type_nonessential)
+
+        # assign as attributes
+        self.rt_total_vec = rt_total
+        self.at_total_vec = at_total
+        self.wt_total_vec = wt_total
+        self.N_total_vec = N_total_vec
+        self.total_time_by_type = total_time_by_type
+
+        # get key output for pie charts
+        self.median_total_type = total_time_by_type
+        self.median_total_essential = t_essential_vec
+        self.median_total_nonessential = t_nonessential_vec
+
+        # format output
+        self.rt_total_sum = self.num2Char(self.rt_total_vec, include_confidence_interval=False)
+        self.at_total_sum = self.num2Char(self.at_total_vec, include_confidence_interval=False)
+        self.wt_total_sum = self.num2Char(self.wt_total_vec, include_confidence_interval=False)
+
+        ## ----
+        # OUTPUTS FOR DASHBOARD
+        ## ----
+        self.t_total_sum = self.num2Char(t_total_vec, include_confidence_interval=False)
+        self.t_essential_sum = self.num2Char(t_essential_vec, include_confidence_interval=False)
+        self.t_nonessential_sum = self.num2Char(t_nonessential_vec, include_confidence_interval=False)
+        self.N_total_sum = self.num2Char2(self.N_total_vec, include_confidence_interval=False)
+
+        # Staff values
+        self.staff_total = self.num2Char2( (260/self.Period) * (np.sum(self.TeamSize * total_time_by_type)/60), include_confidence_interval=False )
+        self.staff_total_cost = self.num2Char_dollars( (260/self.Period) * self.Pay * (np.sum(self.TeamSize * total_time_by_type)/60), include_confidence_interval=False )
+        self.staff_essential = self.num2Char2( (260/self.Period) * (np.sum(self.TeamSize * total_time_by_type_essential)/60), include_confidence_interval=False )
+        self.staff_essential_cost = self.num2Char_dollars( (260/self.Period) * self.Pay * (np.sum(self.TeamSize * total_time_by_type_essential)/60), include_confidence_interval=False )
+        self.staff_nonessential = self.num2Char2( (260/self.Period) * (np.sum(self.TeamSize * total_time_by_type_nonessential)/60), include_confidence_interval=False )
+        self.staff_nonessential_cost = self.num2Char_dollars( (260/self.Period) * self.Pay * (np.sum(self.TeamSize * total_time_by_type_nonessential)/60), include_confidence_interval=False )
