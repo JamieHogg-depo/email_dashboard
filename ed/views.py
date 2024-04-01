@@ -165,9 +165,148 @@ def teams(request):
     return render(request, 'ed/teams.html', context) # pass dictionary
 
 ## ----------------------------------------------------------------------------
-## TEAMS ## -------------------------------------------------------------------
+## With Uncertainty ## --------------------------------------------------------
 ## ----------------------------------------------------------------------------
 def teams_stochastic(request):
+
+    # create context dictionary
+    context = {}
+    context['TeamSize'] = 20
+    context['Pay'] = 80
+    context['Period'] = 1
+    for type_num in range(1,4):
+        context[f'N_lower{type_num}'] = 1
+        context[f'N_upper{type_num}'] = 1
+        context[f'Rt_lower{type_num}'] = 0.9
+        context[f'Rt_upper{type_num}'] = 1.1
+        context[f'Wt_lower{type_num}'] = 0.9
+        context[f'Wt_upper{type_num}'] = 1.1
+        context[f'At_lower{type_num}'] = 0.9
+        context[f'At_upper{type_num}'] = 1.1
+        context[f'Pr_rel{type_num}'] = 1
+
+    # create empty lists
+    N_lower = []
+    N_upper = []
+    Rt_lower = []
+    Rt_upper = []
+    At_lower = []
+    At_upper = []
+    Wt_lower = []
+    Wt_upper = []
+    Pr = []
+
+    if request.method == 'POST':
+        # Retrieve numbers from the form
+        context['TeamSize'] = int(request.POST.get('TeamSize', 0))
+        context['Pay'] = int(request.POST.get('Pay', 0))
+        context['Period'] = int(request.POST.get('Period', 0))
+        for type_num in range(1,4):  # This will loop through 1, 2, 3
+            # for Context vector
+            context[f'N_lower{type_num}'] = int(request.POST.get(f'N_lower{type_num}', 0))
+            context[f'N_upper{type_num}'] = int(request.POST.get(f'N_upper{type_num}', 0))
+            context[f'Rt_lower{type_num}'] = float(request.POST.get(f'Rt_lower{type_num}', 0.0))
+            context[f'Rt_upper{type_num}'] = float(request.POST.get(f'Rt_upper{type_num}', 0.0))
+            context[f'At_lower{type_num}'] = float(request.POST.get(f'At_lower{type_num}', 0.0))
+            context[f'At_upper{type_num}'] = float(request.POST.get(f'At_upper{type_num}', 0.0))
+            context[f'Wt_lower{type_num}'] = float(request.POST.get(f'Wt_lower{type_num}', 0.0))
+            context[f'Wt_upper{type_num}'] = float(request.POST.get(f'Wt_upper{type_num}', 0.0))
+            context[f'Pr_rel{type_num}'] = float(request.POST.get(f'Pr_rel{type_num}', 0.0))
+            # for Function
+            N_lower.append(int(request.POST.get(f'N_lower{type_num}', 0)))
+            N_upper.append(int(request.POST.get(f'N_upper{type_num}', 0)))
+            Rt_lower.append(float(request.POST.get(f'Rt_lower{type_num}', 0.0)))
+            Rt_upper.append(float(request.POST.get(f'Rt_upper{type_num}', 0.0)))
+            At_lower.append(float(request.POST.get(f'At_lower{type_num}', 0.0)))
+            At_upper.append(float(request.POST.get(f'At_upper{type_num}', 0.0)))
+            Wt_lower.append(float(request.POST.get(f'Wt_lower{type_num}', 0.0)))
+            Wt_upper.append(float(request.POST.get(f'Wt_upper{type_num}', 0.0)))
+            Pr.append(float(request.POST.get(f'Pr_rel{type_num}', 0.0)))
+
+            if context[f'N_lower{type_num}'] > context[f'N_upper{type_num}']:
+                error_message = "Error: Upper value must be greater than lower value.<br>Please click back in your browser and check your values for Emails received."
+                return HttpResponseBadRequest(error_message)
+            
+            if context[f'Rt_lower{type_num}'] >= context[f'Rt_upper{type_num}']:
+                error_message = "Error: Upper value must be greater than lower value.<br>Please click back in your browser and check your values for Read time."
+                return HttpResponseBadRequest(error_message)
+            
+            if context[f'At_lower{type_num}'] >= context[f'At_upper{type_num}']:
+                error_message = "Error: Upper value must be greater than lower value.<br>Please click back in your browser and check your values for Action time."
+                return HttpResponseBadRequest(error_message)
+            
+            if context[f'Wt_lower{type_num}'] >= context[f'Wt_upper{type_num}']:
+                error_message = "Error: Upper value must be greater than lower value.<br>Please click back in your browser and check your values for Response time."
+                return HttpResponseBadRequest(error_message)
+
+        # Run simulation
+        sm = ed.EmailReadingSimulation(
+            TeamSize=context['TeamSize'],
+            Pay=context['Pay'],
+            Period=context['Period'],
+            N_lower=np.array(N_lower),
+            N_upper=np.array(N_upper),
+            Rt_lower=np.array(Rt_lower),
+            Rt_upper=np.array(At_upper),
+            At_lower=np.array(At_lower),
+            At_upper=np.array(Rt_upper),
+            Wt_lower=np.array(Wt_lower),
+            Wt_upper=np.array(Wt_upper),
+            Pr = np.array(Pr)
+        )
+
+        # update attributes with simulation
+        sm.simulate()
+        
+        # Use class to provide outputs
+        context['N_total_out'] = sm.N_total_sum
+        context['t_total_sum'] = sm.t_total_sum
+        context['t_essential_sum'] = sm.t_essential_sum
+        context['t_nonessential_sum'] = sm.t_nonessential_sum
+
+        # staff values
+        context['staff_total'] = sm.staff_total
+        context['staff_total_cost'] = sm.staff_total_cost
+        context['staff_essential'] = sm.staff_essential
+        context['staff_essential_cost'] = sm.staff_essential_cost
+        context['staff_nonessential'] = sm.staff_nonessential
+        context['staff_nonessential_cost'] = sm.staff_nonessential_cost
+
+        # Create pie chart by type
+        fig = px.pie(values=sm.median_total_type, 
+                     names=['Type 1', 'Type 2', 'Type 3'],
+                     color_discrete_sequence=['#6e8ab7', '#E59538', '#5B7553'])
+        fig.update_layout(
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            showlegend=False,
+            width=450,  # Specify the width
+            height=450,  # Specify the height
+            font=dict(size=20)
+        )
+        context['pie_type'] = plotly.offline.plot(fig, output_type='div')
+
+        # Create pie chart by relevance
+        fig = px.pie(values=[sm.median_total_essential, sm.median_total_nonessential], 
+                     names=['Essential', 'Nonessential'],
+                     color_discrete_sequence=['#cccccc', '#f76565'])
+        fig.update_layout(
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            showlegend=False,
+            width=450,  # Specify the width
+            height=450,  # Specify the height
+            font=dict(size=20)
+        )
+        context['pie_essential'] = plotly.offline.plot(fig, output_type='div')
+
+    # Pass the context dict to be rendered in the html file
+    return render(request, 'ed/teams_stochastic.html', context) # pass dictionary
+
+## ----------------------------------------------------------------------------
+## No Uncertainty ## ----------------------------------------------------------
+## ----------------------------------------------------------------------------
+def basic_nouncertainty(request):
 
     # create context dictionary
     context = {}
