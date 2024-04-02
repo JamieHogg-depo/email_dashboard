@@ -8,37 +8,58 @@ format:
 editor: visual
 ---
 
+# {style='text-align: center;'}
+
+![](../ed/static/ed/CDS-Logo-Blue.png){width="60%" style="text-align: center;"}
+
+\today
+
+Researchers:
+<br>
+James Hogg
+<br>
+Kerrie Mengersen
+
+{{< pagebreak >}}
+# EXECUTIVE SUMMARY
+
+1. Instruction
+2. Method
+3. Outputs
+4. What do we find
+
+{{< pagebreak >}}
 # Introduction
 
-In this report we describe an interactive email efficiency dashboard created for Good Directions. The dashboard enables Good Directions management to explore current and future email communications. 
+## Instructions
 
-# Deliverables
+## Method
 
-# Objectives
+## Results
 
-- Report that describes the email communication model, including methodologies used, exemplar outcomes, description of the dashboard and illustrations of outputs from the dashboard (approximately 10 pages)
-- Interactive email efficiency dashboard (software tool)
+# Description of Dashboard
 
-Background
 
-https://www.marketingsherpa.com/article/average-email-open-time-is
 
-https://www.radicati.com/wp/wp-content/uploads/2015/02/Email-Statistics-Report-2015-2019-Executive-Summary.pdf states that "In 2015, the number of business emails sent and received per user per day totals 122 emails per day. This figure continues to show growth and is expected to average 126 messages sent and received per business user by the end of 2019. "
-- Article states that on average a person sends 30 emails a day and recieves about 96
+# Statistical methodology
 
-Fantastic article with lots of statistics
-https://hbr.org/2019/01/how-to-spend-way-less-time-on-email-every-day#:~:text=The%20average%20professional%20spends%2028,120%20messages%20received%20per%20day. states "The average professional spends 28% of the work day reading and answering email, according to a McKinsey analysis. For the average full-time worker in America, that amounts to a staggering 2.6 hours spent and 120 messages received per day."
+## Basic
 
-Chronic emailers
-	"These are the people that copy everyone on everything they do. It is usually done as a vain attempt to look important or busy. What these people are really doing is wasting a LOT of other people’s time. Company emails should be limited and should conveyed on a “need to know” basis. That means ONLY the relevant information is disseminated, and ONLY to those that need to know it.""
+## Uncertainty
 
-# Methodology
+To relax the assumption of a fixed read time, we simulate read times from appropriate Gamma Distributions, where the mean is based on the input value. To allow Good Directions to provide their uncertainty we allow the user to input a 'best guess' (aka mean) and a range of possible values (aka 95% interval). Assuming the user is imaging read times as approximately normally distributed, the 95% interval provided is converted to a standard deviation via $(U-L)/3.92$. 
 
-In this section, we describe the formula used to derive the key outputs of the dashboard:
+By first observing the number of emails of each type, we simulate and then sum the read times. We conduct this process 1000 times and then summarise the distribution of the total read times using medians and quantiles. 
 
-- number of emails recieved
-- total reading time
-- staff cost
+## Visualise
+
+# Case studies
+
+# References
+
+# Appendixes
+
+## Deterministic
 
 First, let there be $N$ employees in the company, where each employee sends an average number of emails per day. Any given email falls into one of three *types* such that the number of emails a single person sends in a specified period (e.g., one day) is equal to
 
@@ -79,19 +100,32 @@ $$
 TotalReadingTime (mins) = 3 (10 \times 10 \times 10) / 60 = 50
 $$
 
-### Assumptions
+In this report we describe an interactive email efficiency dashboard created for Good Directions. The dashboard enables Good Directions management to explore current and future email communications. 
 
-- writing an email/responding to an email of type _ is the same
-- 
+# Deliverables
 
-### Uncertainty
+# Objectives
 
-To relax the assumption of a fixed read time, we simulate read times from appropriate Gamma Distributions, where the mean is based on the input value. To allow Good Directions to provide their uncertainty we allow the user to input a 'best guess' (aka mean) and a range of possible values (aka 95% interval). Assuming the user is imaging read times as approximately normally distributed, the 95% interval provided is converted to a standard deviation via $(U-L)/3.92$. 
+- Report that describes the email communication model, including methodologies used, exemplar outcomes, description of the dashboard and illustrations of outputs from the dashboard (approximately 10 pages)
+- Interactive email efficiency dashboard (software tool)
 
-By first observing the number of emails of each type, we simulate and then sum the read times. We conduct this process 1000 times and then summarise the distribution of the total read times using medians and quantiles. 
+Background
 
-# Dashboard
+https://www.marketingsherpa.com/article/average-email-open-time-is
 
-# Exemplars and scenarios
+https://www.radicati.com/wp/wp-content/uploads/2015/02/Email-Statistics-Report-2015-2019-Executive-Summary.pdf states that "In 2015, the number of business emails sent and received per user per day totals 122 emails per day. This figure continues to show growth and is expected to average 126 messages sent and received per business user by the end of 2019. "
+- Article states that on average a person sends 30 emails a day and recieves about 96
 
-# Recommendations
+Fantastic article with lots of statistics
+https://hbr.org/2019/01/how-to-spend-way-less-time-on-email-every-day#:~:text=The%20average%20professional%20spends%2028,120%20messages%20received%20per%20day. states "The average professional spends 28% of the work day reading and answering email, according to a McKinsey analysis. For the average full-time worker in America, that amounts to a staggering 2.6 hours spent and 120 messages received per day."
+
+Chronic emailers
+	"These are the people that copy everyone on everything they do. It is usually done as a vain attempt to look important or busy. What these people are really doing is wasting a LOT of other people’s time. Company emails should be limited and should conveyed on a “need to know” basis. That means ONLY the relevant information is disseminated, and ONLY to those that need to know it.""
+
+# Methodology
+
+In this section, we describe the formula used to derive the key outputs of the dashboard:
+
+- number of emails recieved
+- total reading time
+- staff cost
