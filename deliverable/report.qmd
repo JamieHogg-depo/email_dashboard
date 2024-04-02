@@ -59,48 +59,89 @@ By first observing the number of emails of each type, we simulate and then sum t
 
 # Appendixes
 
-## Deterministic
+## Basic Calculator
 
-First, let there be $N$ employees in the company, where each employee sends an average number of emails per day. Any given email falls into one of three *types* such that the number of emails a single person sends in a specified period (e.g., one day) is equal to
+The following notation is used:
 
-$$
-S_1 + S_2 + S_3 = S_T,
-$$
+- $N_i$: Number of emails of type $i$, where $i \in \{1,2,3\}$ corresponds to the three different types of emails.
+- $R_i$: Fixed time to read each email of type $i$.
+- $A_i$: Fixed time to take action on each email of type $i$.
+- $W_i$: Fixed time to write or respond to each email of type $i$.
+- $P_i$: Probability that an email of type $i$ is essential.
+- $T_{total}$: Total time spent on all emails.
+- $T_{essential}$: Total time spent on essential emails.
+- $T_{nonessential}$: Total time spent on nonessential emails.
 
-where $S_1$ is the average number of emails of type 1 sent. Moreover, for a given email of type $t$, we represent the average number of recipients as $R_t$.
+The total time spent on emails of each type is calculated by summing the product of the number of emails and the respective times for reading, action, and writing. The formula for the total time spent on each type $i$ is given by:
 
-For each type, the average read time, $T_t$, and probability of being relevant, $P_t$, are varied. 
+$$ T_i = N_i \times (R_i + A_i + W_i) $$
 
-To derive the total number of emails recieved by a single employee, we simply multiple the the number of emails sent by each person by the number of recipients. This procedure is complete separately for each type and then summed. 
+This is calculated for each type $i$, and then summed to find the total time spent on all emails:
 
-$$
-TotalEmails = (S_1 R_1) + (S_2 R_2) + (S_3 R_3)
-$$
+$$ T_{total} = \sum_{i=1}^{3} T_i $$
 
-Next, the number of emails recieved for each type is multiplied by the reading time for the given type. This procedure is complete separately for each type and then summed to derive the total reading time for the specified period.  
+To differentiate between essential and nonessential times, we use the probability $P_i$:
 
-$$
-TotalReadingTime = (T_1 S_1 R_1) + (T_2 S_2 R_2) + (T_3 S_3 R_3)
-$$
+$$ T_{essential,i} = P_i \times T_i $$
 
-Consider the following example:
+$$ T_{nonessential,i} = (1 - P_i) \times T_i $$
 
-- $N = 15$
-- $T_1, T_2, T_3 = 10$ seconds
-- $S_1, S_2, S_3 = 10$
-- $R_1, R_2, R_3 = 10$
+Then, to find the aggregate time spent on essential and nonessential emails across all types, we sum across the respective times for each type:
 
-In this instance:
+$$ T_{essential} = \sum_{i=1}^{3} T_{essential,i} $$
 
-$$
-TotalEmails = 3 (10 * 10) = 300
-$$
+$$ T_{nonessential} = \sum_{i=1}^{3} T_{nonessential,i} $$
 
-$$
-TotalReadingTime (mins) = 3 (10 \times 10 \times 10) / 60 = 50
-$$
+The cost associated with the time spent on emails can be determined by multiplying the time by the pay rate. Let $\text{Pay}$ denote the average pay per hour. The cost of time spent on all emails and the cost of time spent on essential and nonessential emails are calculated as follows:
 
-In this report we describe an interactive email efficiency dashboard created for Good Directions. The dashboard enables Good Directions management to explore current and future email communications. 
+$$ \text{Cost}_{total} = T_{total} \times \text{Pay} $$
+
+$$ \text{Cost}_{essential} = T_{essential} \times \text{Pay} $$
+
+$$ \text{Cost}_{nonessential} = T_{nonessential} \times \text{Pay} $$
+
+These formulas provide the basis for the deterministic calculations used to simulate the total time and cost associated with email handling within an organization.
+
+## Intermediate Calculator
+
+The intermediate calculator introduces variability into the derivations, both in the count of received emails and the time taken for the email activities (e.g., read, action, respond). The time for the email activities are modeled using the Gamma distribution, parameterized by the means and standard deviations derived from user inputs. The notation is as follows:
+
+- $N_i$: Random variable for the number of emails of type $i$, with $i \in \{1,2,3\}$ denoting different email types.
+- $R_i, A_i, W_i$: Random variables for the time to read, action, and write emails of type $i$, respectively.
+- $P_i$: Probability that an email of type $i$ is essential.
+- $T_{total}$: Aggregated time spent on all emails across simulations.
+- $T_{essential}$: Aggregated time spent on essential emails across simulations.
+- $T_{nonessential}$: Aggregated time spent on nonessential emails across simulations.
+- $R_{lower}, R_{upper}, A_{lower}, A_{upper}, W_{lower}, W_{upper}$: User-specified lower and upper bounds for reading, action, and writing times, respectively.
+
+1. **Sample the number of emails**:
+  - For each type $i$:
+  $$ N_i \sim \text{Uniform}(N_{lower,i}, N_{upper,i}) $$
+
+2. **Parameterisation of email activities**:
+  - The parameters for the Gamma distribution are derived from the user-specified lower and upper bounds as follows:
+  $$ \mu_i = \frac{R_{upper,i} + R_{lower,i}}{2} $$
+  $$ \sigma_i^2 = \left(\frac{R_{upper,i} - R_{lower,i}}{3.92}\right)^2 $$
+  - Similar calculations are made for action and writing times.
+
+3. **Gamma distribution for time activities**:
+  - For each type $i$ and activity (reading $R_i$, action $A_i$, writing $W_i$):
+  $$ R_i, A_i, W_i \sim \text{Gamma}(k = \frac{\mu_i^2}{\sigma_i^2}, \theta = \frac{\sigma_i^2}{\mu_i}) $$
+  - The shape $k$ and scale $\theta$ parameters are calculated using the derived mean $\mu_i$ and variance $\sigma_i^2$.
+
+4. **Calculate total time**:
+  - The total time for each type $i$ and for each simulation iteration $s$ is the sum of the sampled times:
+  $$ T_{i} = \sum (R_{i} + A_{i} + W_{i}) $$
+
+5. **Stratify by essential and nonessential emails**:
+  - The distinction between essential and nonessential times is made by applying the probability $P_i$ via a Bernoulli trial for each email.
+  $$ T_{essential,i} = T_{i} \times \text{Bernoulli}(P_i) $$
+  $$ T_{nonessential,i} = T_{i} \times (1 - \text{Bernoulli}(P_i)) $$
+
+6. **Calculate yearly hours and cost**
+  - The calculators required to derive the yearly hours and cost values follow those given in the basic calculator. 
+
+By running the above steps 1000 times, the intermediate calculator can estimate the distribution of the output values, including total, essential, and nonessential times, and yearly hours and cost. To summarise the simulations a point estimate (e.g., median) and interval (2.5% and 97.5% quantiles) are reported in the dashboard. 
 
 # Deliverables
 
