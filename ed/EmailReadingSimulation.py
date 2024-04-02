@@ -308,7 +308,13 @@ def plot_gamma_distribution(lower, upper):
     pdf = gamma_dist.pdf(x)
     
     # Plotting
-    return px.line(x=x, y=pdf)
+    fig = px.line(x=x, y=pdf)
+    fig.update_layout(title='',
+                      yaxis_title='Probability',
+                      xaxis_title='Time (mins)')
+
+
+    return fig
 
 
 

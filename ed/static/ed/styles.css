@@ -8,7 +8,15 @@ body {
     background-color: black; /* This sets the line color */
     position: fixed; /* Or 'absolute' */
     left: 50%; /* Adjust this value to position the line horizontally */
-  }
+}
+#footer {
+    position: fixed; /* or position: sticky; */
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: #f8f9fa; /* Add a background color to make the footer distinguishable */
+    padding: 10px 0; /* Add some padding for better readability */
+}
   
 
 

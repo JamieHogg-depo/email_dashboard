@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.offline
+import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import ed.EmailReadingSimulation as ed
 
@@ -66,7 +67,7 @@ def intermediate(request):
         context[f'Wt_upper{type_num}'] = 1.1
         context[f'At_lower{type_num}'] = 0.9
         context[f'At_upper{type_num}'] = 1.1
-        context[f'Pr_rel{type_num}'] = 1
+        context[f'Pr_rel{type_num}'] = 100
 
     # create empty lists
     N_lower = []
@@ -94,7 +95,7 @@ def intermediate(request):
             context[f'At_upper{type_num}'] = float(request.POST.get(f'At_upper{type_num}', 0.0))
             context[f'Wt_lower{type_num}'] = float(request.POST.get(f'Wt_lower{type_num}', 0.0))
             context[f'Wt_upper{type_num}'] = float(request.POST.get(f'Wt_upper{type_num}', 0.0))
-            context[f'Pr_rel{type_num}'] = float(request.POST.get(f'Pr_rel{type_num}', 0.0))
+            context[f'Pr_rel{type_num}'] = int(request.POST.get(f'Pr_rel{type_num}', 0))
             # for Function
             N_lower.append(int(request.POST.get(f'N_lower{type_num}', 0)))
             N_upper.append(int(request.POST.get(f'N_upper{type_num}', 0)))
@@ -104,22 +105,22 @@ def intermediate(request):
             At_upper.append(float(request.POST.get(f'At_upper{type_num}', 0.0)))
             Wt_lower.append(float(request.POST.get(f'Wt_lower{type_num}', 0.0)))
             Wt_upper.append(float(request.POST.get(f'Wt_upper{type_num}', 0.0)))
-            Pr.append(float(request.POST.get(f'Pr_rel{type_num}', 0.0)))
+            Pr.append(int(request.POST.get(f'Pr_rel{type_num}', 0)))
 
             if context[f'N_lower{type_num}'] > context[f'N_upper{type_num}']:
-                error_message = "Error: Upper value must be greater than lower value.<br>Please click back in your browser and check your values for Emails received."
+                error_message = "Error: Max value must be greater than Min value.<br>Please click back in your browser and check your values for Emails received."
                 return HttpResponseBadRequest(error_message)
             
             if context[f'Rt_lower{type_num}'] >= context[f'Rt_upper{type_num}']:
-                error_message = "Error: Upper value must be greater than lower value.<br>Please click back in your browser and check your values for Read time."
+                error_message = "Error: Max value must be greater than Min value.<br>Please click back in your browser and check your values for Read time."
                 return HttpResponseBadRequest(error_message)
             
             if context[f'At_lower{type_num}'] >= context[f'At_upper{type_num}']:
-                error_message = "Error: Upper value must be greater than lower value.<br>Please click back in your browser and check your values for Action time."
+                error_message = "Error: Max value must be greater than Min value.<br>Please click back in your browser and check your values for Action time."
                 return HttpResponseBadRequest(error_message)
             
             if context[f'Wt_lower{type_num}'] >= context[f'Wt_upper{type_num}']:
-                error_message = "Error: Upper value must be greater than lower value.<br>Please click back in your browser and check your values for Response time."
+                error_message = "Error: Max value must be greater than Min value.<br>Please click back in your browser and check your values for Response time."
                 return HttpResponseBadRequest(error_message)
 
         # Create class instance 
@@ -127,7 +128,7 @@ def intermediate(request):
             TeamSize=context['TeamSize'],
             Pay=context['Pay'],
             Period=context['Period'],
-            Pr = np.array(Pr)
+            Pr = np.array(Pr)/100
         ) 
 
         # setup simulation attributes
@@ -157,45 +158,49 @@ def intermediate(request):
         context['staff_nonessential'] = sm.staff_nonessential
         context['staff_nonessential_cost'] = sm.staff_nonessential_cost
 
-        # Create pie chart by type
-        pie_type_df = pd.DataFrame(data = {'value': sm.median_total_type,
-                                           't': ['Type 1', 'Type 2', 'Type 3']})
+    # Create pie chart by type
+        pie_type_df = pd.DataFrame(data = {'values': sm.median_total_type,
+                                           'labels': ['Type 1', 'Type 2', 'Type 3']})
+        hover_text_template = f"<b>%{{label}}</b>: %{{value:.1f}} mins out of {sm.median_total_type.sum():.1f} mins"
 
-        fig = px.pie(pie_type_df,
-                     values='value',
-                     names='t',
-                     color='t',
-                     color_discrete_map={'Type 1': '#6e8ab7',
-                                         'Type 2': '#E59538',
-                                         'Type 3': '#5B7553'})
-                     #color_discrete_sequence=['#6e8ab7', '#E59538', '#5B7553'])
+        # create figure
+        fig = go.Figure(data=[go.Pie(labels=pie_type_df['labels'], 
+                                     values=pie_type_df['values'], 
+                                     hovertemplate=hover_text_template,
+                                     marker=dict(colors=['#6e8ab7', '#E59538', '#5B7553']))])
         fig.update_layout(
+            title="Types",
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            showlegend=False,
             width=450,  # Specify the width
             height=450,  # Specify the height
-            font=dict(size=20)
+            font=dict(size=15),
+            legend=dict(orientation="h",  # Set legend orientation to horizontal
+                        yanchor="bottom"  # Anchor legend to the bottom
+                        )
         )
         context['pie_type'] = plotly.offline.plot(fig, output_type='div')
 
-        # Create pie chart by relevance
-        pie_essential_df = pd.DataFrame(data = {'value': [sm.median_total_essential, sm.median_total_nonessential],
-                                                't': ['Essential', 'Nonessential']})
-        fig = px.pie(pie_essential_df,
-                     values='value',
-                     names='t',
-                     color='t',
-                     color_discrete_map={'Essential': '#cccccc',
-                                         "Nonessential": '#f76565'})
-                     #color_discrete_sequence=['#cccccc', '#f76565'])
+    # Create pie chart by relevance
+        pie_essential_df = pd.DataFrame(data = {'values': [sm.median_total_essential, sm.median_total_nonessential],
+                                                'labels': ['Essential', 'Nonessential']})
+        hover_text_template = f"<b>%{{label}}</b>: %{{value:.1f}} mins out of {(sm.median_total_essential + sm.median_total_nonessential):.1f} mins"
+
+        # create figure
+        fig = go.Figure(data=[go.Pie(labels=pie_essential_df['labels'], 
+                                     values=pie_essential_df['values'], 
+                                     hovertemplate=hover_text_template,
+                                     marker=dict(colors=['#cccccc', '#f76565']))])
         fig.update_layout(
+            title="Essential vs Nonessential",
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            showlegend=False,
             width=450,  # Specify the width
             height=450,  # Specify the height
-            font=dict(size=20)
+            font=dict(size=15),
+            legend=dict(orientation="h",  # Set legend orientation to horizontal
+                        yanchor="bottom"  # Anchor legend to the bottom
+                        )
         )
         context['pie_essential'] = plotly.offline.plot(fig, output_type='div')
 
@@ -217,7 +222,7 @@ def basic(request):
         context[f'Rt_{type_num}'] = 1
         context[f'Wt_{type_num}'] = 1
         context[f'At_{type_num}'] = 1
-        context[f'Pr_rel{type_num}'] = 1
+        context[f'Pr_rel{type_num}'] = 100
 
     # create empty lists
     N = []
@@ -237,20 +242,20 @@ def basic(request):
             context[f'Rt_{type_num}'] = float(request.POST.get(f'Rt_{type_num}', 0.0))
             context[f'At_{type_num}'] = float(request.POST.get(f'At_{type_num}', 0.0))
             context[f'Wt_{type_num}'] = float(request.POST.get(f'Wt_{type_num}', 0.0))
-            context[f'Pr_rel{type_num}'] = float(request.POST.get(f'Pr_rel{type_num}', 0.0))
+            context[f'Pr_rel{type_num}'] = int(request.POST.get(f'Pr_rel{type_num}', 0))
             # for Function
             N.append(int(request.POST.get(f'N_{type_num}', 0)))
             Rt.append(float(request.POST.get(f'Rt_{type_num}', 0.0)))
             At.append(float(request.POST.get(f'At_{type_num}', 0.0)))
             Wt.append(float(request.POST.get(f'Wt_{type_num}', 0.0)))
-            Pr.append(float(request.POST.get(f'Pr_rel{type_num}', 0.0)))
+            Pr.append(int(request.POST.get(f'Pr_rel{type_num}', 0)))
 
         # Create class instance 
         sm = ed.EmailReadingSimulation(
             TeamSize=context['TeamSize'],
             Pay=context['Pay'],
             Period=context['Period'],
-            Pr = np.array(Pr)
+            Pr = np.array(Pr)/100
         ) 
 
         # setup deterministic attributes
@@ -276,45 +281,51 @@ def basic(request):
         context['staff_nonessential'] = sm.staff_nonessential
         context['staff_nonessential_cost'] = sm.staff_nonessential_cost
 
-        # Create pie chart by type
-        pie_type_df = pd.DataFrame(data = {'value': sm.median_total_type,
-                                           't': ['Type 1', 'Type 2', 'Type 3']})
+    # Create pie chart by type
+        pie_type_df = pd.DataFrame(data = {'values': sm.median_total_type,
+                                           'labels': ['Type 1', 'Type 2', 'Type 3']})
+        hover_text_template = f"<b>%{{label}}</b>: %{{value:.1f}} mins out of {sm.median_total_type.sum():.1f} mins"
 
-        fig = px.pie(pie_type_df,
-                     values='value',
-                     names='t',
-                     color='t',
-                     color_discrete_map={'Type 1': '#6e8ab7',
-                                         'Type 2': '#E59538',
-                                         'Type 3': '#5B7553'})
-                     #color_discrete_sequence=['#6e8ab7', '#E59538', '#5B7553'])
+        # create figure
+        fig = go.Figure(data=[go.Pie(labels=pie_type_df['labels'], 
+                                     values=pie_type_df['values'], 
+                                     hovertemplate=hover_text_template,
+                                     marker=dict(colors=['#6e8ab7', '#E59538', '#5B7553']))])
         fig.update_layout(
+            title="Types",
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            showlegend=False,
+            #showlegend=False,
             width=450,  # Specify the width
             height=450,  # Specify the height
-            font=dict(size=20)
+            font=dict(size=15),
+            legend=dict(orientation="h",  # Set legend orientation to horizontal
+                        yanchor="bottom"  # Anchor legend to the bottom
+                        )
         )
         context['pie_type'] = plotly.offline.plot(fig, output_type='div')
 
-        # Create pie chart by relevance
-        pie_essential_df = pd.DataFrame(data = {'value': [sm.median_total_essential, sm.median_total_nonessential],
-                                                't': ['Essential', 'Nonessential']})
-        fig = px.pie(pie_essential_df,
-                     values='value',
-                     names='t',
-                     color='t',
-                     color_discrete_map={'Essential': '#cccccc',
-                                         "Nonessential": '#f76565'})
-                     #color_discrete_sequence=['#cccccc', '#f76565'])
+    # Create pie chart by relevance
+        pie_essential_df = pd.DataFrame(data = {'values': [sm.median_total_essential, sm.median_total_nonessential],
+                                                'labels': ['Essential', 'Nonessential']})
+        hover_text_template = f"<b>%{{label}}</b>: %{{value:.1f}} mins out of {(sm.median_total_essential + sm.median_total_nonessential):.1f} mins"
+
+        # create figure
+        fig = go.Figure(data=[go.Pie(labels=pie_essential_df['labels'], 
+                                     values=pie_essential_df['values'], 
+                                     hovertemplate=hover_text_template,
+                                     marker=dict(colors=['#cccccc', '#f76565']))])
         fig.update_layout(
+            title="Essential vs Nonessential",
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            showlegend=False,
+            #showlegend=False,
             width=450,  # Specify the width
             height=450,  # Specify the height
-            font=dict(size=20)
+            font=dict(size=15),
+            legend=dict(orientation="h",  # Set legend orientation to horizontal
+                        yanchor="bottom"  # Anchor legend to the bottom
+                        )
         )
         context['pie_essential'] = plotly.offline.plot(fig, output_type='div')
 
