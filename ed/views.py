@@ -86,6 +86,54 @@ def intermediate(request):
         context['Pay'] = int(request.POST.get('Pay', 0))
         context['Period'] = int(request.POST.get('Period', 0))
         for type_num in range(1,4):  # This will loop through 1, 2, 3
+
+            ## ----
+            ## ERRORS/WARNING MESSAGES ## 
+            ## ----
+
+            keys = ['N_lower', 'N_upper', 'Rt_lower', 'Rt_upper', 'At_lower', 'At_upper', 'Wt_lower', 'Wt_upper', 'Pr_rel']
+
+            # Ensure all values are greater or equal to 0
+                    # Iterate through keys to retrieve and validate values
+            for key in keys:
+                # Retrieve the value as a float or int based on the key
+                value = float(request.POST.get(f'{key}{type_num}', 0.0)) if 'Pr_rel' not in key else int(request.POST.get(f'{key}{type_num}', 0))
+                
+                # Check if any value is less than zero
+                if value < 0:
+                    # If a value is less than zero, return a bad request response with an error message
+                    error_message = "Error: All inputs must be greater than or equal to zero.<br>Please click back in your browser and check your inputs."
+                    return HttpResponseBadRequest(error_message)
+                
+                # Add the validated value to the context
+                context[f'{key}{type_num}'] = value
+
+            # Ensure pr is between 0 and 100
+            if not (0 <= int(request.POST.get(f'Pr_rel{type_num}', 0)) <= 100):
+                error_message = "Error: 'Percentage of essential' values must be between 0 and 100.<br>Please click back in your browser and check your inputs."
+                return HttpResponseBadRequest(error_message)
+
+            # specific errors
+            if int(request.POST.get(f'N_lower{type_num}', 0)) > int(request.POST.get(f'N_upper{type_num}', 0)):
+                error_message = "Error: Max value must be greater than Min value.<br>Please click back in your browser and check your values for 'Number of emails received'."
+                return HttpResponseBadRequest(error_message)
+            
+            if float(request.POST.get(f'Rt_lower{type_num}', 0.0)) >= float(request.POST.get(f'Rt_upper{type_num}', 0.0)):
+                error_message = "Error: Max value must be greater than Min value.<br>Please click back in your browser and check your values for 'Read'."
+                return HttpResponseBadRequest(error_message)
+            
+            if float(request.POST.get(f'At_lower{type_num}', 0.0)) >= float(request.POST.get(f'At_upper{type_num}', 0.0)):
+                error_message = "Error: Max value must be greater than Min value.<br>Please click back in your browser and check your values for 'Action'."
+                return HttpResponseBadRequest(error_message)
+            
+            if float(request.POST.get(f'Wt_lower{type_num}', 0.0)) >= float(request.POST.get(f'Wt_upper{type_num}', 0.0)):
+                error_message = "Error: Max value must be greater than Min value.<br>Please click back in your browser and check your values for 'Respond'."
+                return HttpResponseBadRequest(error_message)
+
+            ## ----
+            ## ADD REQUESTS TO CONTEXT ## 
+            ## ----
+
             # for Context vector
             context[f'N_lower{type_num}'] = int(request.POST.get(f'N_lower{type_num}', 0))
             context[f'N_upper{type_num}'] = int(request.POST.get(f'N_upper{type_num}', 0))
@@ -106,22 +154,6 @@ def intermediate(request):
             Wt_lower.append(float(request.POST.get(f'Wt_lower{type_num}', 0.0)))
             Wt_upper.append(float(request.POST.get(f'Wt_upper{type_num}', 0.0)))
             Pr.append(int(request.POST.get(f'Pr_rel{type_num}', 0)))
-
-            if context[f'N_lower{type_num}'] > context[f'N_upper{type_num}']:
-                error_message = "Error: Max value must be greater than Min value.<br>Please click back in your browser and check your values for Emails received."
-                return HttpResponseBadRequest(error_message)
-            
-            if context[f'Rt_lower{type_num}'] >= context[f'Rt_upper{type_num}']:
-                error_message = "Error: Max value must be greater than Min value.<br>Please click back in your browser and check your values for Read time."
-                return HttpResponseBadRequest(error_message)
-            
-            if context[f'At_lower{type_num}'] >= context[f'At_upper{type_num}']:
-                error_message = "Error: Max value must be greater than Min value.<br>Please click back in your browser and check your values for Action time."
-                return HttpResponseBadRequest(error_message)
-            
-            if context[f'Wt_lower{type_num}'] >= context[f'Wt_upper{type_num}']:
-                error_message = "Error: Max value must be greater than Min value.<br>Please click back in your browser and check your values for Response time."
-                return HttpResponseBadRequest(error_message)
 
         # Create class instance 
         sm = ed.EmailReadingSimulation(
@@ -237,6 +269,35 @@ def basic(request):
         context['Pay'] = int(request.POST.get('Pay', 0))
         context['Period'] = int(request.POST.get('Period', 0))
         for type_num in range(1,4):  # This will loop through 1, 2, 3
+
+            ## ----
+            ## ERRORS/WARNING MESSAGES ## 
+            ## ----
+            # Ensure all values are greater or equal to 0
+                    # Iterate through keys to retrieve and validate values
+            keys = ['N_', 'Rt_', 'At_', 'Wt_', 'Pr_rel']
+            for key in keys:
+                # Retrieve the value as a float or int based on the key
+                value = float(request.POST.get(f'{key}{type_num}', 0.0)) if 'Pr_rel' not in key else int(request.POST.get(f'{key}{type_num}', 0))
+                
+                # Check if any value is less than zero
+                if value < 0:
+                    # If a value is less than zero, return a bad request response with an error message
+                    error_message = "Error: All inputs must be greater than or equal to zero.<br>Please click back in your browser and check your inputs."
+                    return HttpResponseBadRequest(error_message)
+                
+                # Add the validated value to the context
+                context[f'{key}{type_num}'] = value
+
+            # Ensure pr is between 0 and 100
+            if not (0 <= int(request.POST.get(f'Pr_rel{type_num}', 0)) <= 100):
+                error_message = "Error: 'Percentage of essential' values must be between 0 and 100.<br>Please click back in your browser and check your inputs."
+                return HttpResponseBadRequest(error_message)
+
+            ## ----
+            ## ADD REQUESTS TO CONTEXT ## 
+            ## ----
+
             # for Context vector
             context[f'N_{type_num}'] = int(request.POST.get(f'N_{type_num}', 0))
             context[f'Rt_{type_num}'] = float(request.POST.get(f'Rt_{type_num}', 0.0))
@@ -338,8 +399,8 @@ def basic(request):
 def gamma_dist(request):
 
     # create context dictionary
-    context = {'lower': 4,
-               'upper':6}
+    context = {'lower': 0.9,
+               'upper': 1.1}
 
     if request.method == 'POST':
         # Retrieve numbers from the form
