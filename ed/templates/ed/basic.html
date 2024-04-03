@@ -42,21 +42,21 @@
 
         <!-- Row 1 (Table Headers) -->
         <tr style="background-color: white;">
-            <td class="border-right" style="text-align: right;">Size of Team</td>
+            <th class="border-right" style="text-align: right;">Number of staff</th>
             <td class="input-cell">
                 <input type="number" name="TeamSize" value="{{ TeamSize }}">
             </td>
         </tr>
 
         <tr style="background-color: white;">
-            <td class="border-right" style="text-align: right;">Period size (days)</td>
+            <th class="border-right" style="text-align: right;">Period size (days)</th>
             <td class="input-cell">
                 <input type="number" name="Period" value="{{ Period }}">
             </td>
         </tr>
 
         <tr style="background-color: white;">
-            <td class="border-right" style="text-align: right;">Average pay per hour ($)</td>
+            <th class="border-right" style="text-align: right;">Average pay per hour ($)</th>
             <td class="input-cell">
                 <input type="number" name="Pay" value="{{ Pay }}">
             </td>
@@ -74,18 +74,26 @@
 <!-- --------------------------------------------------------------------- -->
 <div class="column right-top">
 
-<h3>Email Types</h3>
+<h3>By email type</h3>
 
     <table class="spreadsheet-table" style="width:70%">
+
+        <!-- Row 1 -->
+        <tr style="background-color: white;">
+            <th class="border-right"></th>
+            <th class="border-right"></th>
+            <th class="border-right" colspan="3">Time for email activities (mins)</th>
+            <th></th>
+        </tr>
 
         <!-- Row 1 (Table Headers) -->
         <tr style="background-color: white;">
             <th class="border-right">Type</th>
-            <th class="border-right">Emails received</th>
-            <th>Read time (mins)</th>
-            <th>Action time (mins)</th>
-            <th  class="border-right">Response time (mins)</th>
-            <th>Percentage of essential (%)</th>
+            <th class="border-right">Number of emails received</th>
+            <th>Read</th>
+            <th>Action</th>
+            <th  class="border-right">Respond</th>
+            <th>Percentage of essential (%) *</th>
         </tr>
     
         <!-- Type 1 -->

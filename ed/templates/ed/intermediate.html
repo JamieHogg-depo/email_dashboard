@@ -41,21 +41,21 @@
 
         <!-- Row 1 (Table Headers) -->
         <tr style="background-color: white;">
-            <td class="border-right" style="text-align: right;">Size of Team</td>
+            <th class="border-right" style="text-align: right;">Number of staff</th>
             <td class="input-cell">
                 <input type="number" name="TeamSize" value="{{ TeamSize }}">
             </td>
         </tr>
 
         <tr style="background-color: white;">
-            <td class="border-right" style="text-align: right;">Period size (days)</td>
+            <th class="border-right" style="text-align: right;">Period size (days)</th>
             <td class="input-cell">
                 <input type="number" name="Period" value="{{ Period }}">
             </td>
         </tr>
 
         <tr style="background-color: white;">
-            <td class="border-right" style="text-align: right;">Average pay per hour ($)</td>
+            <th class="border-right" style="text-align: right;">Average pay per hour ($)</th>
             <td class="input-cell">
                 <input type="number" name="Pay" value="{{ Pay }}">
             </td>
@@ -73,17 +73,25 @@
 <!-- --------------------------------------------------------------------- -->
 <div class="column right-top">
 
-<h3>Email Types</h3>
+<h3>By email type</h3>
 
     <table class="spreadsheet-table" style="width:70%">
 
-        <!-- Row 1 (Table Headers) -->
+        <!-- Row 1 -->
+        <tr style="background-color: white;">
+            <th class="border-right"></th>
+            <th class="border-right" colspan="2"></th>
+            <th class="border-right" colspan="6">Time for email activities (mins)</th>
+            <th colspan="2"></th>
+        </tr>
+
+        <!-- Row 2 -->
         <tr style="background-color: white;">
             <th class="border-right">Type</th>
-            <th class="border-right" colspan="2">Emails received</th>
-            <th colspan="2">Read time (mins)</th>
-            <th colspan="2">Action time (mins)</th>
-            <th  class="border-right" colspan="2">Response time (mins)</th>
+            <th class="border-right" colspan="2">Number of emails received</th>
+            <th colspan="2">Read</th>
+            <th colspan="2">Action</th>
+            <th  class="border-right" colspan="2">Respond</th>
             <th colspan="2">Percentage of essential (%) *</th>
         </tr>
 

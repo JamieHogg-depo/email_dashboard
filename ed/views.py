@@ -169,7 +169,7 @@ def intermediate(request):
                                      hovertemplate=hover_text_template,
                                      marker=dict(colors=['#6e8ab7', '#E59538', '#5B7553']))])
         fig.update_layout(
-            title="Types",
+            title="Email type",
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
             width=450,  # Specify the width
@@ -292,7 +292,7 @@ def basic(request):
                                      hovertemplate=hover_text_template,
                                      marker=dict(colors=['#6e8ab7', '#E59538', '#5B7553']))])
         fig.update_layout(
-            title="Types",
+            title="Email type",
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
             #showlegend=False,
