@@ -1,0 +1,349 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  reportpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[C]{Technical report}
+\fancyfoot[L]{Centre for Data Science}
+\fancyfoot[R]{\today}
+\renewcommand{\footrulewidth}{0.4pt} % Adds a horizontal line in the footer
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Technical report},
+  pdfauthor={James Hogg, Kerrie Mengersen},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Technical report}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{Email Efficiency Calculators}
+\author{James Hogg, Kerrie Mengersen}
+\date{April 4, 2024}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\includegraphics[width=0.3\textwidth]{../ed/static/ed/CDS-Logo-Blue.png}
+\end{center}
+
+\newpage{}
+
+\section{Basic Calculator}\label{basic-calculator}
+
+The following notation is used:
+
+\begin{itemize}
+\tightlist
+\item
+  \(N_i\): Number of emails of type \(i\), where \(i \in \{1,2,3\}\)
+  corresponds to the three email types.
+\item
+  \(R_i\): Time to read each email of type \(i\) in minutes.
+\item
+  \(A_i\): Time to take action on each email of type \(i\) in minutes.
+\item
+  \(W_i\): Time to write or respond to each email of type \(i\) in
+  minutes.
+\item
+  \(P_i\): Probability that an email of type \(i\) is essential.
+\item
+  \(T_{total}\): Total email time.
+\item
+  \(T_{essential}\): Total email time that is essential.
+\item
+  \(T_{nonessential}\): Total email time that is nonessential.
+\end{itemize}
+
+The total email time per type is calculated by summing the product of
+the number of emails and the respective email activity times (e.g.,
+read, action, responding). The formula for the total email time for
+email type \(i\) is
+
+\[ T_i = N_i \times (R_i + A_i + W_i) \].
+
+Note that the values in the right pie chart are \(T_1,T_2,T_3\). The
+total email time in minutes is derived by summing.
+
+\[ T_{total} = \sum_{i=1}^{3} T_i \]
+
+To differentiate between essential and nonessential email time, we use
+the probability \(P_i\).
+
+\[ T_{essential,i} = P_i \times T_i \]
+
+\[ T_{nonessential,i} = (1 - P_i) \times T_i \]
+
+Then, to find the email time spent on essential and nonessential emails
+across all email types, we sum across the respective times for each
+email type:
+
+\[ T_{essential} = \sum_{i=1}^{3} T_{essential,i} \]
+
+\[ T_{nonessential} = \sum_{i=1}^{3} T_{nonessential,i} \]
+
+The values in the left pie chart are \(T_{essential}\) and
+\(T_{nonessential}\).
+
+The cost associated with the managing emails is determined by
+multiplying the email time, in hours, by the pay rate per hour. The cost
+of time spent on all emails and the cost of time spent on essential and
+nonessential emails is calculated as follows:
+
+\[ \text{Cost}_{total} = ( T_{total} \times \text{Pay} ) / 60\]
+
+\[ \text{Cost}_{essential} = ( T_{essential} \times \text{Pay}  ) / 60\]
+
+\[ \text{Cost}_{nonessential} = ( T_{nonessential} \times \text{Pay}  ) / 60\]
+
+\newpage{}
+
+\section{Intermediate Calculator}\label{intermediate-calculator}
+
+The intermediate calculator introduces variability into the derivations,
+both in the number of received emails and the time taken for the email
+activities (e.g., read, action, respond). The time for the email
+activities are modeled using the Gamma distribution with its parameters
+derived from the user inputs. We use similar notation as above, with the
+introduction of the following new terms.
+
+\begin{itemize}
+\tightlist
+\item
+  \(N_{lower,i}, N_{upper,i}\): User-specified lower and upper bounds
+  for the number of emails recieved of email type \(i\)
+\item
+  \(R_{lower,i}, R_{upper,i}, A_{lower,i}, A_{upper,i}, W_{lower,i}, W_{upper,i}\):
+  User-specified lower and upper bounds for reading, action, and writing
+  times for email type \(i\), respectively.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Sample the number of emails}:
+  \[ N_i \sim \text{Uniform}(N_{lower,i}, N_{upper,i}) \]
+\item
+  \textbf{Parameterisation of distribution of time to complete email
+  activities}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The parameters for the Gamma distribution are derived from the
+    user-specified lower and upper bounds.
+  \item
+    Consider reading times as an example.
+    \[ \mu_{reading,i} = \frac{R_{upper,i} + R_{lower,i}}{2} \]
+    \[ \sigma_{reading,i}^2 = \left(\frac{R_{upper,i} - R_{lower,i}}{3.92}\right)^2 \]
+  \item
+    Similar calculations are made for action and writing times.
+  \end{itemize}
+\item
+  \textbf{Simulate email activity times}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Consider reading times for email type \(i\). Simulate a vector of
+    length \(N_i\) from the following:
+    \[\text{Gamma}(k = \frac{\mu_{reading,i}^2}{\sigma_{reading,i}^2}, \theta = \frac{\sigma_{reading,i}^2}{\mu_{reading,i}}) \]
+  \item
+    Complete the above simulation for each email type and email activity
+  \end{itemize}
+\item
+  \textbf{Calculate total email time per email type}:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  The total email time, \(T_i\), is the sum of the sampled vectors for
+  each email activity.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  \textbf{Stratify by essential and nonessential emails}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The distinction between essential and nonessential time is made by
+    randomly assigning each of the simulated emails in the previous step
+    a 1 (denoting essential) or a zero (denoting nonessential).
+  \item
+    Simulate \(N_i\)-dimensional vectors, \(\boldsymbol{G}_i\), of
+    assignments using a Bernoulli trail with probability \(P_i\)
+  \item
+    Derive the esssential and nonessential email time using the dot
+    product of \(\boldsymbol{G}_i\) and the vector of total email time
+    for each email.
+  \end{itemize}
+\item
+  \textbf{Calculate total time}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The total email time is \(T_1 + T_2 + T_3\).
+  \end{itemize}
+\item
+  \textbf{Calculate yearly hours and cost}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The formula used to derive the yearly hours and cost values follow
+    those given in the basic calculator.
+  \end{itemize}
+\end{enumerate}
+
+By running the above steps 1000 times, the intermediate calculator
+estimates the distribution of the output values, including total,
+essential, and nonessential times, and yearly hours and cost. To
+summarise the simulations a point estimate (e.g., median) and interval
+(2.5\% and 97.5\% quantiles) are reported in the dashboard. The pie
+charts in the intermediate calculator are the point estimates only.
+
+
+
+\end{document}
