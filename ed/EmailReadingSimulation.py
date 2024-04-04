@@ -166,9 +166,9 @@ class EmailReadingSimulation:
         ## ----
         # OUTPUTS FOR DASHBOARD
         ## ----
-        self.t_total_sum = self.num2Char(t_total_vec)
-        self.t_essential_sum = self.num2Char(t_essential_vec)
-        self.t_nonessential_sum = self.num2Char(t_nonessential_vec)
+        self.t_total_sum = self.num2Char(t_total_vec/60)
+        self.t_essential_sum = self.num2Char(t_essential_vec/60)
+        self.t_nonessential_sum = self.num2Char(t_nonessential_vec/60)
         self.N_total_sum = self.num2Char2(self.N_total_vec)
 
         # Staff values
@@ -249,9 +249,9 @@ class EmailReadingSimulation:
         ## ----
         # OUTPUTS FOR DASHBOARD
         ## ----
-        self.t_total_sum = self.num2Char(t_total_vec, include_confidence_interval=False)
-        self.t_essential_sum = self.num2Char(t_essential_vec, include_confidence_interval=False)
-        self.t_nonessential_sum = self.num2Char(t_nonessential_vec, include_confidence_interval=False)
+        self.t_total_sum = self.num2Char(t_total_vec/60, include_confidence_interval=False)
+        self.t_essential_sum = self.num2Char(t_essential_vec/60, include_confidence_interval=False)
+        self.t_nonessential_sum = self.num2Char(t_nonessential_vec/60, include_confidence_interval=False)
         self.N_total_sum = self.num2Char2(self.N_total_vec, include_confidence_interval=False)
 
         # Staff values
