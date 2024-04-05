@@ -83,7 +83,7 @@ class EmailReadingSimulation:
 
     def simulate(self):
         """Simulate the distribution of total reading times."""
-        n_sims = 10
+        n_sims = 1000
         rt_total = np.zeros(n_sims)
         at_total = np.zeros(n_sims)
         wt_total = np.zeros(n_sims)

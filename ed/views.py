@@ -48,6 +48,9 @@ class EmailProductivityCalculator:
 def landing(request):
     return render(request, 'ed/landing.html')
 
+#def landing(request):
+    #return HttpResponse("Landing Page Works")
+
 ## ----------------------------------------------------------------------------
 ## With Uncertainty ## --------------------------------------------------------
 ## ----------------------------------------------------------------------------
