@@ -5,10 +5,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 import numpy as np
 import pandas as pd
-import plotly.express as px
+#import plotly.express as px
 import plotly.offline
 import plotly.graph_objects as go
-import matplotlib.pyplot as plt
 import ed.EmailReadingSimulation as ed
 
 ## ----------------------------------------------------------------------------

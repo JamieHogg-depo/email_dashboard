@@ -1,6 +1,5 @@
 import numpy as np
 import scipy.stats as stats
-import matplotlib.pyplot as plt
 import plotly.express as px
 
 class EmailReadingSimulation:
@@ -42,9 +41,6 @@ class EmailReadingSimulation:
         self.Wt_sd = (Wt_upper - Wt_lower) / 3.92  # Standard deviation calculation
         
         # initialise
-        self.rt_total_vec = None
-        self.at_total_vec = None
-        self.wt_total_vec = None
         self.N_total_vec = None
         self.rt_total_sum = None
         self.at_total_sum = None
@@ -83,7 +79,7 @@ class EmailReadingSimulation:
 
     def simulate(self):
         """Simulate the distribution of total reading times."""
-        n_sims = 1000
+        n_sims = 500
         rt_total = np.zeros(n_sims)
         at_total = np.zeros(n_sims)
         wt_total = np.zeros(n_sims)
@@ -147,30 +143,24 @@ class EmailReadingSimulation:
         t_essential_vec = np.sum(total_time_by_type_essential, axis=1)
         t_nonessential_vec = np.sum(total_time_by_type_nonessential, axis=1)
 
-        # assign as attributes
-        self.rt_total_vec = rt_total
-        self.at_total_vec = at_total
-        self.wt_total_vec = wt_total
-        self.N_total_vec = N_total_vec
-        self.total_time_by_type = total_time_by_type
+        # format output
+        self.rt_total_sum = self.num2Char(rt_total)
+        self.at_total_sum = self.num2Char(at_total)
+        self.wt_total_sum = self.num2Char(wt_total)
+
+        ## ----
+        # OUTPUTS FOR DASHBOARD
+        ## ----
 
         # get key output for pie charts
         self.median_total_type = np.median(total_time_by_type, axis=0)
         self.median_total_essential = np.median(t_essential_vec)
         self.median_total_nonessential = np.median(t_nonessential_vec)
 
-        # format output
-        self.rt_total_sum = self.num2Char(self.rt_total_vec)
-        self.at_total_sum = self.num2Char(self.at_total_vec)
-        self.wt_total_sum = self.num2Char(self.wt_total_vec)
-
-        ## ----
-        # OUTPUTS FOR DASHBOARD
-        ## ----
         self.t_total_sum = self.num2Char(t_total_vec/60)
         self.t_essential_sum = self.num2Char(t_essential_vec/60)
         self.t_nonessential_sum = self.num2Char(t_nonessential_vec/60)
-        self.N_total_sum = self.num2Char2(self.N_total_vec)
+        self.N_total_sum = self.num2Char2(N_total_vec)
 
         # Staff values
         self.staff_total = self.num2Char2( (260/self.Period) * (np.sum(self.TeamSize * total_time_by_type, axis=1)/60) )
@@ -230,22 +220,15 @@ class EmailReadingSimulation:
         t_essential_vec = np.sum(total_time_by_type_essential)
         t_nonessential_vec = np.sum(total_time_by_type_nonessential)
 
-        # assign as attributes
-        self.rt_total_vec = rt_total
-        self.at_total_vec = at_total
-        self.wt_total_vec = wt_total
-        self.N_total_vec = N_total_vec
-        self.total_time_by_type = total_time_by_type
-
         # get key output for pie charts
         self.median_total_type = total_time_by_type
         self.median_total_essential = t_essential_vec
         self.median_total_nonessential = t_nonessential_vec
 
         # format output
-        self.rt_total_sum = self.num2Char(self.rt_total_vec, include_confidence_interval=False)
-        self.at_total_sum = self.num2Char(self.at_total_vec, include_confidence_interval=False)
-        self.wt_total_sum = self.num2Char(self.wt_total_vec, include_confidence_interval=False)
+        self.rt_total_sum = self.num2Char(rt_total, include_confidence_interval=False)
+        self.at_total_sum = self.num2Char(at_total, include_confidence_interval=False)
+        self.wt_total_sum = self.num2Char(wt_total, include_confidence_interval=False)
 
         ## ----
         # OUTPUTS FOR DASHBOARD
@@ -253,7 +236,7 @@ class EmailReadingSimulation:
         self.t_total_sum = self.num2Char(t_total_vec/60, include_confidence_interval=False)
         self.t_essential_sum = self.num2Char(t_essential_vec/60, include_confidence_interval=False)
         self.t_nonessential_sum = self.num2Char(t_nonessential_vec/60, include_confidence_interval=False)
-        self.N_total_sum = self.num2Char2(self.N_total_vec, include_confidence_interval=False)
+        self.N_total_sum = self.num2Char2(N_total_vec, include_confidence_interval=False)
 
         # Staff values
         self.staff_total = self.num2Char2( (260/self.Period) * (np.sum(self.TeamSize * total_time_by_type)/60), include_confidence_interval=False )
@@ -303,7 +286,7 @@ def plot_gamma_distribution(lower, upper):
     gamma_dist = stats.gamma(a=alpha, scale=theta)
     
     # Generate x values
-    x = np.linspace(0, mean + 4*std, 1000)
+    x = np.linspace(0, mean + 4*std, 100)
     
     # Calculate the PDF values for x
     pdf = gamma_dist.pdf(x)
