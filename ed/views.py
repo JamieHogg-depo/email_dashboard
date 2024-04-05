@@ -1,5 +1,4 @@
-from datetime import datetime
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
@@ -46,9 +45,6 @@ class EmailProductivityCalculator:
 
 def landing(request):
     return render(request, 'ed/landing.html')
-
-#def landing(request):
-    #return HttpResponse("Landing Page Works")
 
 ## ----------------------------------------------------------------------------
 ## With Uncertainty ## --------------------------------------------------------
