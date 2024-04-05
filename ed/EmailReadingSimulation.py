@@ -83,19 +83,20 @@ class EmailReadingSimulation:
 
     def simulate(self):
         """Simulate the distribution of total reading times."""
-        rt_total = np.zeros(1000)
-        at_total = np.zeros(1000)
-        wt_total = np.zeros(1000)
-        t_total_vec = np.zeros(1000)
-        t_essential_vec = np.zeros(1000)
-        t_nonessential_vec = np.zeros(1000)
-        N_total_vec = np.zeros(1000)
-        total_time_by_type = np.zeros([1000,3])
-        total_time_by_type_essential = np.zeros([1000,3])
-        total_time_by_type_nonessential = np.zeros([1000,3])
+        n_sims = 10
+        rt_total = np.zeros(n_sims)
+        at_total = np.zeros(n_sims)
+        wt_total = np.zeros(n_sims)
+        t_total_vec = np.zeros(n_sims)
+        t_essential_vec = np.zeros(n_sims)
+        t_nonessential_vec = np.zeros(n_sims)
+        N_total_vec = np.zeros(n_sims)
+        total_time_by_type = np.zeros([n_sims,3])
+        total_time_by_type_essential = np.zeros([n_sims,3])
+        total_time_by_type_nonessential = np.zeros([n_sims,3])
 
-        # run for 1000 iterations
-        for s in range(1000):
+        # run for n_sims iterations
+        for s in range(n_sims):
         # for each iteration draw a set of reading, action and writing times for each type
         # doing this loop once is like a single dataset
             
