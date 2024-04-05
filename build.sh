@@ -8,11 +8,6 @@ set -o errexit
 
 
 
-# Activate virtual environment if necessary
-# This assumes your virtual environment directory is named 'venv'
-# and located in the same directory as this script.
-source .venv/Scripts/activate
-
 # Ensure the correct Python version is being used
 # This checks for Python version 3.8 as an example; adjust as needed.
 REQUIRED_PY_VER="3.8"
