@@ -25,3 +25,14 @@ sm.simulate()
 mem_us = memory_usage(sm.simulate)
 print('Memory usage (in chunks of .1 seconds): %s' % mem_us)
 print('Maximum memory usage: %s' % max(mem_us))
+
+def load_packages():
+    import numpy as np
+    import pandas as pd
+    import plotly.express as px
+    import plotly.graph_objects as go
+    import matplotlib.pyplot as plt
+    import ed.EmailReadingSimulation as ed
+
+memory_after_imports = memory_usage((load_packages, ))
+print(f"Memory Usage After Imports: {memory_after_imports} MB")
