@@ -71,6 +71,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'web_project.wsgi.application'
 
+CSRF_TRUSTED_ORIGINS = ['https://emaildashboard-production.up.railway.app']
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
