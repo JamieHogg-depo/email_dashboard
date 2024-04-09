@@ -49,9 +49,9 @@ def landing(request):
     return render(request, 'ed/landing.html')
 
 ## ----------------------------------------------------------------------------
-## With Uncertainty ## --------------------------------------------------------
+## ADVANCED ## ----------------------------------------------------------------
 ## ----------------------------------------------------------------------------
-def intermediate(request):
+def advanced(request):
 
     # create context dictionary
     context = {}
@@ -237,12 +237,12 @@ def intermediate(request):
         context['pie_essential'] = plotly.offline.plot(fig, output_type='div')
 
     # Pass the context dict to be rendered in the html file
-    return render(request, 'ed/intermediate.html', context) # pass dictionary
+    return render(request, 'ed/advanced.html', context) # pass dictionary
 
 ## ----------------------------------------------------------------------------
-## No Uncertainty ## ----------------------------------------------------------
+## STANDARD ## ----------------------------------------------------------------
 ## ----------------------------------------------------------------------------
-def basic(request):
+def standard(request):
 
     # create context dictionary
     context = {}
@@ -391,7 +391,7 @@ def basic(request):
         context['pie_essential'] = plotly.offline.plot(fig, output_type='div')
 
     # Pass the context dict to be rendered in the html file
-    return render(request, 'ed/basic.html', context) # pass dictionary
+    return render(request, 'ed/standard.html', context) # pass dictionary
 
 ## ----------------------------------------------------------------------------
 ## Gamma Plot ## --------------------------------------------------------------

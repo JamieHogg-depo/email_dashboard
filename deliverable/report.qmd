@@ -26,7 +26,7 @@ editor: visual
 \end{center}
 
 {{< pagebreak >}}
-# Basic Calculator
+# Standard Calculator
 
 The following notation is used:
 
@@ -70,9 +70,9 @@ $$ \text{Cost}_{essential} = ( T_{essential} \times \text{Pay}  ) / 60$$
 $$ \text{Cost}_{nonessential} = ( T_{nonessential} \times \text{Pay}  ) / 60$$
 
 {{< pagebreak >}}
-# Intermediate Calculator
+# Advanced Calculator
 
-The intermediate calculator introduces variability into the derivations, both in the number of received emails and the time taken for the email activities (e.g., read, action, respond). The time for the email activities are modeled using the Gamma distribution with its parameters derived from the user inputs. We use similar notation as above, with the introduction of the following new terms.
+The advanced calculator introduces variability into the derivations, both in the number of received emails and the time taken for the email activities (e.g., read, action, respond). The time for the email activities are modeled using the Gamma distribution with its parameters derived from the user inputs. We use similar notation as above, with the introduction of the following new terms.
 
   - $N_{lower,i}, N_{upper,i}$: User-specified lower and upper bounds for the number of emails recieved of email type $i$
   - $R_{lower,i}, R_{upper,i}, A_{lower,i}, A_{upper,i}, W_{lower,i}, W_{upper,i}$: User-specified lower and upper bounds for reading, action, and writing times for email type $i$, respectively.
@@ -105,6 +105,6 @@ The intermediate calculator introduces variability into the derivations, both in
     - The total email time is $T_1 + T_2 + T_3$. 
 
 7. **Calculate yearly hours and cost**
-    - The formula used to derive the yearly hours and cost values follow those given in the basic calculator. 
+    - The formula used to derive the yearly hours and cost values follow those given in the standard calculator. 
 
-By running the above steps 1000 times, the intermediate calculator estimates the distribution of the output values, including total, essential, and nonessential times, and yearly hours and cost. To summarise the simulations a point estimate (e.g., median) and interval (2.5% and 97.5% quantiles) are reported in the dashboard. The pie charts in the intermediate calculator are the point estimates only. 
+By running the above steps 1000 times, the advanced calculator estimates the distribution of the output values, including total, essential, and nonessential times, and yearly hours and cost. To summarise the simulations a point estimate (e.g., median) and interval (2.5% and 97.5% quantiles) are reported in the dashboard. The pie charts in the advanced calculator are the point estimates only. 

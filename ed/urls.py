@@ -3,7 +3,7 @@ from ed import views
 
 urlpatterns = [
     path("", views.landing, name="landing"),
-    path("basic/", views.basic, name = "basic"),
+    path("standard/", views.standard, name = "standard"),
     path("gamma_dist/", views.gamma_dist, name = "gamma_dist"),
-    path("intermediate/", views.intermediate, name = "intermediate")
+    path("advanced/", views.advanced, name = "advanced")
 ]
