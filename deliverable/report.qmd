@@ -1,7 +1,7 @@
 ---
 title: "Technical report"
 subtitle: "Email Efficiency Calculators"
-date: 04/04/2024
+date: 04/10/2024
 date-format: long
 author: James Hogg, Kerrie Mengersen
 format:
@@ -14,9 +14,9 @@ format:
         \usepackage{fancyhdr}
         \pagestyle{fancy}
         \fancyhead{}
-        \fancyhead[C]{Technical report}
+        \fancyhead[C]{Additional file}
         \fancyfoot[L]{Centre for Data Science}
-        \fancyfoot[R]{\today}
+        \fancyfoot[R]{10 April 2024}
         \renewcommand{\footrulewidth}{0.4pt} % Adds a horizontal line in the footer
 editor: visual
 ---
