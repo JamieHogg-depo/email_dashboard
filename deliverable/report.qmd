@@ -34,10 +34,10 @@ The following notation is used:
   - $R_i$: Time to read each email of type $i$ in minutes. 
   - $A_i$: Time to take action on each email of type $i$ in minutes. 
   - $W_i$: Time to write or respond to each email of type $i$ in minutes. 
-  - $P_i$: Probability that an email of type $i$ is essential.
+  - $P_i$: Probability that an email of type $i$ is relevant.
   - $T_{total}$: Total email time.
-  - $T_{essential}$: Total email time that is essential.
-  - $T_{nonessential}$: Total email time that is nonessential.
+  - $T_{relevant}$: Total email time that is relevant.
+  - $T_{irrelevant}$: Total email time that is irrelevant.
 
 The total email time per type is calculated by summing the product of the number of emails and the respective email activity times (e.g., read, action, responding). The formula for the total email time for email type $i$ is
 
@@ -47,27 +47,27 @@ Note that the values in the right pie chart are $T_1,T_2,T_3$. The total email t
 
 $$ T_{total} = \sum_{i=1}^{3} T_i $$
 
-To differentiate between essential and nonessential email time, we use the probability $P_i$.
+To differentiate between relevant and irrelevant email time, we use the probability $P_i$.
 
-$$ T_{essential,i} = P_i \times T_i $$
+$$ T_{relevant,i} = P_i \times T_i $$
 
-$$ T_{nonessential,i} = (1 - P_i) \times T_i $$
+$$ T_{irrelevant,i} = (1 - P_i) \times T_i $$
 
-Then, to find the email time spent on essential and nonessential emails across all email types, we sum across the respective times for each email type:
+Then, to find the email time spent on relevant and irrelevant emails across all email types, we sum across the respective times for each email type:
 
-$$ T_{essential} = \sum_{i=1}^{3} T_{essential,i} $$
+$$ T_{relevant} = \sum_{i=1}^{3} T_{relevant,i} $$
 
-$$ T_{nonessential} = \sum_{i=1}^{3} T_{nonessential,i} $$
+$$ T_{irrelevant} = \sum_{i=1}^{3} T_{irrelevant,i} $$
 
-The values in the left pie chart are $T_{essential}$ and $T_{nonessential}$.
+The values in the left pie chart are $T_{relevant}$ and $T_{irrelevant}$.
 
-The cost associated with the managing emails is determined by multiplying the email time, in hours, by the pay rate per hour. The cost of time spent on all emails and the cost of time spent on essential and nonessential emails is calculated as follows:
+The cost associated with the managing emails is determined by multiplying the email time, in hours, by the pay rate per hour. The cost of time spent on all emails and the cost of time spent on relevant and irrelevant emails is calculated as follows:
 
 $$ \text{Cost}_{total} = ( T_{total} \times \text{Pay} ) / 60$$
 
-$$ \text{Cost}_{essential} = ( T_{essential} \times \text{Pay}  ) / 60$$
+$$ \text{Cost}_{relevant} = ( T_{relevant} \times \text{Pay}  ) / 60$$
 
-$$ \text{Cost}_{nonessential} = ( T_{nonessential} \times \text{Pay}  ) / 60$$
+$$ \text{Cost}_{irrelevant} = ( T_{irrelevant} \times \text{Pay}  ) / 60$$
 
 {{< pagebreak >}}
 # Advanced Calculator
@@ -96,10 +96,10 @@ The advanced calculator introduces variability into the derivations, both in the
 
   - The total email time, $T_i$, is the sum of the sampled vectors for each email activity. 
 
-5. **Stratify by essential and nonessential emails**:
-    - The distinction between essential and nonessential time is made by randomly assigning each of the simulated emails in the previous step a 1 (denoting essential) or a zero (denoting nonessential). 
+5. **Stratify by relevant and irrelevant emails**:
+    - The distinction between relevant and irrelevant time is made by randomly assigning each of the simulated emails in the previous step a 1 (denoting relevant) or a zero (denoting irrelevant). 
     - Simulate $N_i$-dimensional vectors, $\boldsymbol{G}_i$, of assignments using a Bernoulli trail with probability $P_i$
-    - Derive the esssential and nonessential email time using the dot product of $\boldsymbol{G}_i$ and the vector of total email time for each email. 
+    - Derive the relevant and irrelevant email time using the dot product of $\boldsymbol{G}_i$ and the vector of total email time for each email. 
 
 6. **Calculate total time**:
     - The total email time is $T_1 + T_2 + T_3$. 
@@ -107,4 +107,4 @@ The advanced calculator introduces variability into the derivations, both in the
 7. **Calculate yearly hours and cost**
     - The formula used to derive the yearly hours and cost values follow those given in the standard calculator. 
 
-By running the above steps 1000 times, the advanced calculator estimates the distribution of the output values, including total, essential, and nonessential times, and yearly hours and cost. To summarise the simulations a point estimate (e.g., median) and interval (2.5% and 97.5% quantiles) are reported in the dashboard. The pie charts in the advanced calculator are the point estimates only. 
+By running the above steps 1000 times, the advanced calculator estimates the distribution of the output values, including total, relevant, and irrelevant times, and yearly hours and cost. To summarise the simulations a point estimate (e.g., median) and interval (2.5% and 97.5% quantiles) are reported in the dashboard. The pie charts in the advanced calculator are the point estimates only. 

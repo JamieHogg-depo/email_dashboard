@@ -58,6 +58,10 @@ def advanced(request):
     context['TeamSize'] = 20
     context['Pay'] = 80
     context['Period'] = 1
+    # default names
+    context['Name1'], context['Name2'], context['Name3']  = "All relevant", "50-50", "Low relevance"
+    # default relevance
+    context['Pr_rel1'], context['Pr_rel2'], context['Pr_rel3'] = 100, 50, 10
     for type_num in range(1,4):
         context[f'N_lower{type_num}'] = 1
         context[f'N_upper{type_num}'] = 1
@@ -67,7 +71,6 @@ def advanced(request):
         context[f'Wt_upper{type_num}'] = 1.1
         context[f'At_lower{type_num}'] = 0.9
         context[f'At_upper{type_num}'] = 1.1
-        context[f'Pr_rel{type_num}'] = 100
 
     # create empty lists
     N_lower = []
@@ -81,6 +84,10 @@ def advanced(request):
     Pr = []
 
     if request.method == 'POST':
+        # Retrieve names from form
+        context['Name1'] = request.POST.get('Name1')
+        context['Name2'] = request.POST.get('Name2')
+        context['Name3'] = request.POST.get('Name3')
         # Retrieve numbers from the form
         context['TeamSize'] = int(request.POST.get('TeamSize', 0))
         context['Pay'] = int(request.POST.get('Pay', 0))
@@ -110,7 +117,7 @@ def advanced(request):
 
             # Ensure pr is between 0 and 100
             if not (0 <= int(request.POST.get(f'Pr_rel{type_num}', 0)) <= 100):
-                error_message = "Error: 'Percentage of essential' values must be between 0 and 100.<br>Please click back in your browser and check your inputs."
+                error_message = "Error: 'Percentage of relevant' values must be between 0 and 100.<br>Please click back in your browser and check your inputs."
                 return HttpResponseBadRequest(error_message)
 
             # specific errors
@@ -192,7 +199,8 @@ def advanced(request):
 
     # Create pie chart by type
         pie_type_df = pd.DataFrame(data = {'values': sm.median_total_type,
-                                           'labels': ['Type 1', 'Type 2', 'Type 3']})
+                                           'labels': [context['Name1'], context['Name2'], context['Name3']]})
+                                        #'labels': ['Type 1', 'Type 2', 'Type 3']})
         hover_text_template = f"<b>%{{label}}</b>: %{{value:.1f}} mins out of {sm.median_total_type.sum():.1f} mins"
 
         # create figure
@@ -205,7 +213,7 @@ def advanced(request):
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
             width=450,  # Specify the width
-            height=450,  # Specify the height
+            height=560,  # Specify the height
             font=dict(size=15),
             legend=dict(orientation="h",  # Set legend orientation to horizontal
                         yanchor="bottom"  # Anchor legend to the bottom
@@ -215,7 +223,7 @@ def advanced(request):
 
     # Create pie chart by relevance
         pie_essential_df = pd.DataFrame(data = {'values': [sm.median_total_essential, sm.median_total_nonessential],
-                                                'labels': ['Essential', 'Nonessential']})
+                                                'labels': ['Relevant', 'Irrelevant']})
         hover_text_template = f"<b>%{{label}}</b>: %{{value:.1f}} mins out of {(sm.median_total_essential + sm.median_total_nonessential):.1f} mins"
 
         # create figure
@@ -224,11 +232,11 @@ def advanced(request):
                                      hovertemplate=hover_text_template,
                                      marker=dict(colors=['#cccccc', '#f76565']))])
         fig.update_layout(
-            title="Essential vs Nonessential",
+            title="Relevance",
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
             width=450,  # Specify the width
-            height=450,  # Specify the height
+            height=560,  # Specify the height
             font=dict(size=15),
             legend=dict(orientation="h",  # Set legend orientation to horizontal
                         yanchor="bottom"  # Anchor legend to the bottom
@@ -249,12 +257,16 @@ def standard(request):
     context['TeamSize'] = 20
     context['Pay'] = 80
     context['Period'] = 1
+    # default names
+    context['Name1'], context['Name2'], context['Name3']  = "All relevant", "50-50", "Low relevance"
+    # default relevance
+    context['Pr_rel1'], context['Pr_rel2'], context['Pr_rel3'] = 100, 50, 10
+    # loop
     for type_num in range(1,4):
         context[f'N_{type_num}'] = 1
         context[f'Rt_{type_num}'] = 1
         context[f'Wt_{type_num}'] = 1
         context[f'At_{type_num}'] = 1
-        context[f'Pr_rel{type_num}'] = 100
 
     # create empty lists
     N = []
@@ -264,6 +276,10 @@ def standard(request):
     Pr = []
 
     if request.method == 'POST':
+        # Retrieve names from form
+        context['Name1'] = request.POST.get('Name1')
+        context['Name2'] = request.POST.get('Name2')
+        context['Name3'] = request.POST.get('Name3')
         # Retrieve numbers from the form
         context['TeamSize'] = int(request.POST.get('TeamSize', 0))
         context['Pay'] = int(request.POST.get('Pay', 0))
@@ -291,7 +307,7 @@ def standard(request):
 
             # Ensure pr is between 0 and 100
             if not (0 <= int(request.POST.get(f'Pr_rel{type_num}', 0)) <= 100):
-                error_message = "Error: 'Percentage of essential' values must be between 0 and 100.<br>Please click back in your browser and check your inputs."
+                error_message = "Error: 'Percentage of relevant' values must be between 0 and 100.<br>Please click back in your browser and check your inputs."
                 return HttpResponseBadRequest(error_message)
 
             ## ----
@@ -344,7 +360,8 @@ def standard(request):
 
     # Create pie chart by type
         pie_type_df = pd.DataFrame(data = {'values': sm.median_total_type,
-                                           'labels': ['Type 1', 'Type 2', 'Type 3']})
+                                           'labels': [context['Name1'], context['Name2'], context['Name3']]})
+                                           #'labels': ['Type 1', 'Type 2', 'Type 3']})
         hover_text_template = f"<b>%{{label}}</b>: %{{value:.1f}} mins out of {sm.median_total_type.sum():.1f} mins"
 
         # create figure
@@ -358,7 +375,7 @@ def standard(request):
             plot_bgcolor='rgba(0,0,0,0)',
             #showlegend=False,
             width=450,  # Specify the width
-            height=450,  # Specify the height
+            height=560,  # Specify the height
             font=dict(size=15),
             legend=dict(orientation="h",  # Set legend orientation to horizontal
                         yanchor="bottom"  # Anchor legend to the bottom
@@ -368,7 +385,7 @@ def standard(request):
 
     # Create pie chart by relevance
         pie_essential_df = pd.DataFrame(data = {'values': [sm.median_total_essential, sm.median_total_nonessential],
-                                                'labels': ['Essential', 'Nonessential']})
+                                                'labels': ['Relevant', 'Irrelevant']})
         hover_text_template = f"<b>%{{label}}</b>: %{{value:.1f}} mins out of {(sm.median_total_essential + sm.median_total_nonessential):.1f} mins"
 
         # create figure
@@ -377,12 +394,12 @@ def standard(request):
                                      hovertemplate=hover_text_template,
                                      marker=dict(colors=['#cccccc', '#f76565']))])
         fig.update_layout(
-            title="Essential vs Nonessential",
+            title="Relevance",
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
             #showlegend=False,
             width=450,  # Specify the width
-            height=450,  # Specify the height
+            height=560,  # Specify the height
             font=dict(size=15),
             legend=dict(orientation="h",  # Set legend orientation to horizontal
                         yanchor="bottom"  # Anchor legend to the bottom

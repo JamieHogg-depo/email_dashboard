@@ -76,10 +76,11 @@
 
 <h3>By email type</h3>
 
-    <table class="spreadsheet-table" style="width:70%">
+    <table class="spreadsheet-table" style="width:100%">
 
         <!-- Row 1 -->
         <tr style="background-color: white;">
+            <th></th>
             <th class="border-right"></th>
             <th class="border-right" colspan="2"></th>
             <th class="border-right" colspan="6">Time for email activities (mins)</th>
@@ -88,15 +89,17 @@
 
         <!-- Row 2 -->
         <tr style="background-color: white;">
-            <th class="border-right">Type</th>
+            <th></th>
+            <th class="border-right">Type name</th>
             <th class="border-right" colspan="2">Number of emails received</th>
             <th colspan="2">Read</th>
             <th colspan="2">Action</th>
             <th  class="border-right" colspan="2">Respond</th>
-            <th colspan="2">Percentage of essential (%) *</th>
+            <th colspan="2">Percentage of relevant (%) *</th>
         </tr>
 
         <tr class="small-text" style="background-color: white;">
+            <td></td>
             <td class="border-right"></td>
             <td>Min</td>
             <td class="border-right">Max</td>
@@ -111,7 +114,10 @@
 
         <!-- Type 1 -->
         <tr style="background-color: #6e8ab7;">
-            <td class="border-right">1</td>
+            <td>1</td>
+            <td class="input-cell border-right">
+                <input type="text" name="Name1" value="{{ Name1 }}">
+            </td>
             <td class="input-cell">
                 <input type="number" name="N_lower1" value="{{ N_lower1 }}">
             </td>
@@ -143,7 +149,10 @@
 
         <!-- Type 2 -->
         <tr style="background-color: #E59538;">
-            <td class="border-right">2</td>
+            <td>2</td>
+            <td class="input-cell border-right">
+                <input type="text" name="Name2" value="{{ Name2 }}">
+            </td>
             <td class="input-cell">
                 <input type="number" name="N_lower2" value="{{ N_lower2 }}">
             </td>
@@ -175,7 +184,10 @@
 		
         <!-- Type 3 -->
         <tr style="background-color: #5B7553;">
-            <td class="border-right">3</td>
+            <td>3</td>
+            <td class="input-cell border-right">
+                <input type="text" name="Name3" value="{{ Name3 }}">
+            </td>
             <td class="input-cell">
                 <input type="number" name="N_lower3" value="{{ N_lower3 }}">
             </td>
@@ -208,7 +220,7 @@
 
     <br>
     <div style="font-size: 0.8em;">
-      *: "Percentage of essential (%)" is the probability that a single email of the specific type will be relevant, on average.   
+      *: "Percentage of relevant (%)" is the probability that a single email of the specific type will be relevant, on average.   
     </div>
 
 </form>
@@ -250,8 +262,8 @@
 
     <tr>
         <th style="width: 32%;">Total</th>
-        <th style="width: 32%; background-color: #cccccc;">Essential</th>
-        <th style="width: 32%; background-color: #f76565;">Nonessential</th>
+        <th style="width: 32%; background-color: #cccccc;">Relevant</th>
+        <th style="width: 32%; background-color: #f76565;">Irrelevant</th>
     </tr>
 
     <tr>
@@ -276,8 +288,8 @@
 
     <tr>
         <th style="width: 32%;">Total</th>
-        <th style="width: 32%; background-color: #cccccc;">Essential</th>
-        <th style="width: 32%; background-color: #f76565;">Nonessential</th>
+        <th style="width: 32%; background-color: #cccccc;">Relevant</th>
+        <th style="width: 32%; background-color: #f76565;">Irrelevant</th>
     </tr>
 
     <tr>
@@ -299,8 +311,8 @@
 
     <tr>
         <th style="width: 32%;">Total</th>
-        <th style="width: 32%; background-color: #cccccc;">Essential</th>
-        <th style="width: 32%; background-color: #f76565;">Nonessential</th>
+        <th style="width: 32%; background-color: #cccccc;">Relevant</th>
+        <th style="width: 32%; background-color: #f76565;">Irrelevant</th>
     </tr>
 
     <tr>
